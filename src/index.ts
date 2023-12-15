@@ -1,0 +1,1 @@
+export { StakingServiceClient } from "./client";

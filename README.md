@@ -6,14 +6,6 @@ This repository contains the Protocol Buffer definitions for the Coinbase **Stak
 
 Staking API provides a set of APIs to aid in non-custodial staking for multiple protocols and networks.
 
-# Documentation
-
-In order to self-host the documentation run please use the swagger-ui docker container like so:
-
-```bash
-make swagger-ui
-```
-
 ## Prerequisites
 
 - [Node 18.12.0 or higher](https://nodejs.org/en/blog/release/v18.12.0)
@@ -23,11 +15,6 @@ make swagger-ui
 - [`src/client/`](./src/client/) contains client instantiation helpers for Staking APIs.
 - [`src/gen/`](./src/gen/) contains Typescript code generated from the Protocol Buffers.
 - [`src/examples/`](./src/examples/) contains examples to consume the client library.
-
-## Get Started
-
-1. Get an API key from [Coinbase Cloud Console](cloud.coinbase.com)
-2. Clone the repository
 
 ## Get Started
 To test that your API Key gives you access as expected to the Staking APIs:

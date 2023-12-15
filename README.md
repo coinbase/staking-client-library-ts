@@ -21,8 +21,9 @@ To test that your API Key gives you access as expected to the Staking APIs:
 
 1. Clone this GitHub repo
 2. Download your API key from the Coinbase Cloud UI and save it as `.coinbase_cloud_api_key.json` at the root of this repo
-3. Run `ts-node src/examples/public/example.ts`
-4. You should see output like the following:
+3. Run `npm install && npm run build`
+4. Run `ts-node src/examples/public/example.ts`
+5. You should see output like the following:
    ```text
    {
       actions: [

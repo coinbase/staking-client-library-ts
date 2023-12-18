@@ -1,1 +1,1 @@
-export { StakingServiceClient } from "./client";
+export { StakingServiceClient } from "./client/staking-service-client";

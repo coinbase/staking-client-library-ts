@@ -1,5 +1,5 @@
 {
-  "name": "staking-client-library-ts",
+  "name": "@coinbase/staking-client-library-ts",
   "version": "1.0.0",
   "description": "Coinbase Cloud Staking API Typescript Library",
   "license": "Apache-2.0",

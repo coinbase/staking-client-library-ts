@@ -27,10 +27,13 @@ import {
   Workflow,
 } from "../gen/coinbase/staking/v1alpha1/workflow.pb";
 
+import { EthereumKiln } from "./protocols/ethereum_kiln_staking";
+
 const DEFAULT_URL = "https://api.developer.coinbase.com/staking";
 
 export class StakingServiceClient {
-  private readonly baseURL: string;
+  readonly baseURL: string;
+  readonly EthereumKiln: EthereumKiln;
 
   constructor(baseURL?: string) {
     if (baseURL) {
@@ -38,49 +41,40 @@ export class StakingServiceClient {
     } else {
       this.baseURL = DEFAULT_URL;
     }
+
+    this.EthereumKiln = new EthereumKiln(this);
   }
 
+  // List protocols supported by Staking API
   async listProtocols(): Promise<ListProtocolsResponse> {
     const path: string = "/api/v1alpha1/protocols";
     const method: string = "GET";
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: ListProtocolsRequest = {};
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
 
     return StakingService.ListProtocols(req, initReq);
   }
 
+  // List networks supported by Staking API for a given protocol.
   async listNetworks(protocol: string): Promise<ListNetworksResponse> {
     const parent: string = `protocols/${protocol}`;
     const path: string = `/api/v1alpha1/${parent}/networks`;
     const method: string = "GET";
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: ListNetworksRequest = {
       parent: parent,
     };
 
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     return StakingService.ListNetworks(req, initReq);
   }
 
+  // List actions supported by Staking API for a given protocol and network.
   async listActions(
     protocol: string,
     network: string,
@@ -89,42 +83,105 @@ export class StakingServiceClient {
     const path: string = `/api/v1alpha1/${parent}/actions`;
     const method: string = "GET";
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: ListActionsRequest = {
       parent: parent,
     };
 
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     return StakingService.ListActions(req, initReq);
   }
 
+  // Returns point-in-time context of staking data for an address. This function takes the entire req object as input.
+  // Use the protocol-specific helper functions like EthereumKiln.ViewStakingContext to view protocol and network
+  // specific staking context.
   async viewStakingContext(
     req: ViewStakingContextRequest,
   ): Promise<ViewStakingContextResponse> {
     const path: string = "/api/v1alpha1/viewStakingContext:view";
     const method: string = "GET";
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
 
     return StakingService.ViewStakingContext(req, initReq);
   }
 
+  // Create a workflow under a given project. This function takes the entire req object as input.
+  // Use the protocol-specific helper functions like EthereumKiln.Stake to create a protocol and action specific workflow.
+  async createWorkflow(
+    projectId: string,
+    req: CreateWorkflowRequest,
+  ): Promise<Workflow> {
+    const parent: string = `projects/${projectId}`;
+    const path: string = `/api/v1alpha1/${parent}/workflows`;
+    const method: string = "POST";
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
+
+    return StakingService.CreateWorkflow(req, initReq);
+  }
+
+  // Get a workflow given its project and workflow id.
+  async getWorkflow(projectId: string, workflowId: string): Promise<Workflow> {
+    const parent: string = `projects/${projectId}`;
+    const name: string = `${parent}/workflows/${workflowId}`;
+    const path: string = `/api/v1alpha1/${name}`;
+    const method: string = "GET";
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
+
+    const req: GetWorkflowRequest = {
+      name: name,
+    };
+
+    return StakingService.GetWorkflow(req, initReq);
+  }
+
+  // Return back a signed tx or a broadcasted tx hash for a given workflow and step number.
+  async performWorkflowStep(
+    workflowName: string,
+    stepIndex: number,
+    data?: string,
+  ): Promise<Workflow> {
+    const path: string = `/api/v1alpha1/${parent}/workflows`;
+    const method: string = "POST";
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
+
+    const req: PerformWorkflowStepRequest = {
+      name: workflowName,
+      step: stepIndex,
+      data,
+    };
+
+    return StakingService.PerformWorkflowStep(req, initReq);
+  }
+
+  // Refresh a workflow step given its workflow name and step number.
+  async refreshWorkflowStep(
+    workflowName: string,
+    stepIndex: number,
+  ): Promise<Workflow> {
+    const path: string = `/api/v1alpha1/${parent}/workflows`;
+    const method: string = "POST";
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
+
+    const req: RefreshWorkflowStepRequest = {
+      name: workflowName,
+      step: stepIndex,
+    };
+
+    return StakingService.RefreshWorkflowStep(req, initReq);
+  }
+
+  // List workflows for a given project.
   async listWorkflows(
     project: string,
     pageSize: number = 100,
@@ -134,8 +191,8 @@ export class StakingServiceClient {
     const path: string = `/api/v1alpha1/${parent}/workflows`;
     const method: string = "GET";
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: ListWorkflowsRequest = {
       parent: parent,
@@ -143,114 +200,22 @@ export class StakingServiceClient {
       filter: filter,
     };
 
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     return StakingService.ListWorkflows(req, initReq);
   }
+}
 
-  async getWorkflow(projectId: string, workflowId: string): Promise<Workflow> {
-    const parent: string = `projects/${projectId}`;
-    const name: string = `${parent}/workflows/${workflowId}`;
-    const path: string = `/api/v1alpha1/${name}`;
-    const method: string = "GET";
+async function getAuthDetails(
+  baseURL: string,
+  path: string,
+  method: string,
+): Promise<fm.InitReq> {
+  // Generate the JWT token
+  const token = await buildJWT(baseURL + path, method);
 
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
-
-    const req: GetWorkflowRequest = {
-      name: name,
-    };
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    return StakingService.GetWorkflow(req, initReq);
-  }
-
-  async createWorkflow(
-    projectId: string,
-    workflow: Workflow,
-  ): Promise<Workflow> {
-    const parent: string = `projects/${projectId}`;
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
-    const method: string = "POST";
-
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
-
-    const req: CreateWorkflowRequest = {
-      parent,
-      workflow,
-    };
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    return StakingService.CreateWorkflow(req, initReq);
-  }
-
-  async performWorkflowStep(
-    workflowName: string,
-    stepIndex: number,
-    data?: string,
-  ): Promise<Workflow> {
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
-    const method: string = "POST";
-
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
-
-    const req: PerformWorkflowStepRequest = {
-      name: workflowName,
-      step: stepIndex,
-      data,
-    };
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    return StakingService.PerformWorkflowStep(req, initReq);
-  }
-
-  async refreshWorkflowStep(
-    workflowName: string,
-    stepIndex: number,
-  ): Promise<Workflow> {
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
-    const method: string = "POST";
-
-    // Generate the JWT token
-    const token = await buildJWT(this.baseURL + path, method);
-
-    const req: RefreshWorkflowStepRequest = {
-      name: workflowName,
-      step: stepIndex,
-    };
-
-    const initReq: fm.InitReq = {
-      pathPrefix: this.baseURL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    return StakingService.RefreshWorkflowStep(req, initReq);
-  }
+  return {
+    pathPrefix: baseURL,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 }

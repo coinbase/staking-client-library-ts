@@ -1,14 +1,14 @@
 {
   "name": "@coinbase/staking-client-library-ts",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Coinbase Cloud Staking API Typescript Library",
-  "repository": "https://github.com/coinbase/staking-client-library-ts.git",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc",
+    "prepare": "npm run build",
     "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*'",
     "lintfix": "eslint . --ext .ts --fix --ignore-pattern '/dist/*/*'"
   },
@@ -16,6 +16,10 @@
     "access": "public",
     "provenance": true
   },
+  "files": [
+    "src/",
+    "dist/"
+  ],
   "devDependencies": {
     "@types/node-jose": "^1.1.10",
     "@typescript-eslint/eslint-plugin": "^6.7.0",

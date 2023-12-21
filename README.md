@@ -1,5 +1,7 @@
 # Staking API Typescript Client Library
 
+[![npm version](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts.svg)](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts)
+
 This repository contains the Protocol Buffer definitions for the Coinbase **Staking API**, as well as the Typescript client libraries generated from them.
 
 ## Overview
@@ -64,16 +66,16 @@ To test that your API Key gives you access as expected to the Staking APIs:
 
 ## Running example from your application
 
-1. Build the packages in this repo with `npm install && npm run build`
-2. Install this package in your application - `npm install <path/to/staking-client-library-ts>`
-3. Add your API key to the root of your application as `.coinbase_cloud_api_key.json`
-4. Run example code:
+1. Install this package in your application - `npm install @coinbase/staking-client-library-ts`
+2. Add your API key to the root of your application as `.coinbase_cloud_api_key.json`
+3. Run example code:
 
    ```typescript
-   import { StakingServiceClient } from "../staking-client-library-ts";
+   import { StakingServiceClient } from "@coinbase/staking-client-library-ts";
+   
+   const client = new StakingServiceClient();
    
    const exampleFunction = () => {
-        const client = new StakingServiceClient();
         client.listProtocols().then((response) => {
             console.log(response);
         });

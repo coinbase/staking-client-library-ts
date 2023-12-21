@@ -25,6 +25,7 @@ import {
   PerformWorkflowStepRequest,
   RefreshWorkflowStepRequest,
   Workflow,
+  WorkflowState,
 } from "../gen/coinbase/staking/v1alpha1/workflow.pb";
 
 import { EthereumKiln } from "./protocols/ethereum_kiln_staking";
@@ -143,18 +144,21 @@ export class StakingServiceClient {
 
   // Return back a signed tx or a broadcasted tx hash for a given workflow and step number.
   async performWorkflowStep(
-    workflowName: string,
+    projectId: string,
+    workflowId: string,
     stepIndex: number,
-    data?: string,
+    data: string,
   ): Promise<Workflow> {
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
+    const parent: string = `projects/${projectId}`;
+    const name: string = `${parent}/workflows/${workflowId}`;
+    const path: string = `/api/v1alpha1/${name}/step`;
     const method: string = "POST";
 
     // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: PerformWorkflowStepRequest = {
-      name: workflowName,
+      name: name,
       step: stepIndex,
       data,
     };
@@ -164,17 +168,20 @@ export class StakingServiceClient {
 
   // Refresh a workflow step given its workflow name and step number.
   async refreshWorkflowStep(
-    workflowName: string,
+    projectId: string,
+    workflowId: string,
     stepIndex: number,
   ): Promise<Workflow> {
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
+    const parent: string = `projects/${projectId}`;
+    const name: string = `${parent}/workflows/${workflowId}`;
+    const path: string = `/api/v1alpha1/${name}/refresh`;
     const method: string = "POST";
 
     // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(this.baseURL, path, method);
 
     const req: RefreshWorkflowStepRequest = {
-      name: workflowName,
+      name: name,
       step: stepIndex,
     };
 
@@ -202,6 +209,29 @@ export class StakingServiceClient {
 
     return StakingService.ListWorkflows(req, initReq);
   }
+}
+
+export function workflowHasFinished(workflow: Workflow): boolean {
+  return (
+    workflow.state === WorkflowState.STATE_COMPLETED ||
+    workflow.state === WorkflowState.STATE_FAILED ||
+    workflow.state === WorkflowState.STATE_CANCELED ||
+    workflow.state === WorkflowState.STATE_CANCEL_FAILED
+  );
+}
+
+export function workflowWaitingForSigning(workflow: Workflow): boolean {
+  return workflow.state === WorkflowState.STATE_WAITING_FOR_SIGNING;
+}
+
+export function workflowWaitingForExternalBroadcast(
+  workflow: Workflow,
+): boolean {
+  return workflow.state === WorkflowState.STATE_WAITING_FOR_EXT_BROADCAST;
+}
+
+export function workflowFailedRefreshable(workflow: Workflow): boolean {
+  return workflow.state === WorkflowState.STATE_FAILED_REFRESHABLE;
 }
 
 async function getAuthDetails(

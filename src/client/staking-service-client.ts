@@ -26,6 +26,9 @@ import {
   RefreshWorkflowStepRequest,
   Workflow,
   WorkflowState,
+  WorkflowStep,
+  TxStepOutput,
+  WaitStepOutput,
 } from "../gen/coinbase/staking/v1alpha1/workflow.pb";
 
 import { EthereumKiln } from "./protocols/ethereum_kiln_staking";
@@ -232,6 +235,14 @@ export function workflowWaitingForExternalBroadcast(
 
 export function workflowFailedRefreshable(workflow: Workflow): boolean {
   return workflow.state === WorkflowState.STATE_FAILED_REFRESHABLE;
+}
+
+export function isTxStepOutput(step: WorkflowStep): step is WorkflowStep & { txStepOutput: TxStepOutput } {
+  return (step as WorkflowStep).txStepOutput !== undefined;
+}
+
+export function isWaitStepOutput(step: WorkflowStep): step is WorkflowStep & { waitStepOutput: WaitStepOutput } {
+  return (step as WorkflowStep).waitStepOutput !== undefined;
 }
 
 async function getAuthDetails(

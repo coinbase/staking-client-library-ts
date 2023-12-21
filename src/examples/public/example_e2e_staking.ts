@@ -4,6 +4,8 @@ import {
   workflowHasFinished,
   workflowWaitingForSigning,
   workflowWaitingForExternalBroadcast,
+  isTxStepOutput,
+  isWaitStepOutput,
 } from "../../client/staking-service-client";
 import { Workflow } from "../../gen/coinbase/staking/v1alpha1/workflow.pb";
 import { calculateTimeDifference } from "../../utils/date";
@@ -13,6 +15,7 @@ const privateKey: string = ""; // replace with your private key
 const stakerAddress: string = ""; // replace with your staker address
 const integrationAddress: string = "0x0a868e4e07a0a00587a783720b76fad9f7eea009"; // replace with your integration address
 const amount: string = "123"; // replace with your amount
+const network: string = "goerli"; // replace with your network
 
 const client = new StakingServiceClient();
 
@@ -34,7 +37,7 @@ async function stakePartialEth(): Promise<void> {
     // Create a new eth kiln stake workflow
     workflow = await client.EthereumKiln.stake(
       projectId,
-      "goerli",
+      network,
       false,
       stakerAddress,
       integrationAddress,
@@ -53,7 +56,7 @@ async function stakePartialEth(): Promise<void> {
 
     console.log("Workflow created %s ...", workflow.name);
   } catch (error: any) {
-    throw new Error(`Error creating workflow ${error.message}`);
+    throw new Error(`Error creating workflow: ${error.message}`);
   }
 
   // Loop until the workflow has reached an end state.
@@ -67,7 +70,7 @@ async function stakePartialEth(): Promise<void> {
       workflow = await client.getWorkflow(projectId, workflowId);
     } catch (error: any) {
       // TODO: add retry logic for network errors
-      throw new Error(`Error getting workflow ${error.message}`);
+      throw new Error(`Error getting workflow: ${error.message}`);
     }
 
     await printWorkflowProgressDetails(workflow);
@@ -84,7 +87,6 @@ async function stakePartialEth(): Promise<void> {
       console.log("Signing unsigned tx %s ...", unsignedTx);
       const signedTx = await signer.signTransaction(privateKey, unsignedTx);
       console.log("Returning back signed tx %s ...", signedTx);
-      console.warn("HALTING");
 
       workflow = await client.performWorkflowStep(
         projectId,
@@ -121,10 +123,15 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
 
   const step = workflow.steps[currentStepId];
 
-  const txStepDetails = `state: ${step.txStepOutput?.state} tx hash: ${step.txStepOutput?.txHash}`;
+  let stepDetails = "";
 
-  // TODO(rohit) add support later
-  // const waitStepDetails = `state: ${step.waitStepOutput?.state}} current: ${step.waitStepOutput?.current}} target: ${step.waitStepOutput?.target}`
+  if (isTxStepOutput(step)) {
+    stepDetails = `state: ${step.txStepOutput?.state} tx hash: ${step.txStepOutput?.txHash}`;
+  } else if (isWaitStepOutput(step)) {
+    stepDetails = `state: ${step.waitStepOutput?.state}} current: ${step.waitStepOutput?.current}} target: ${step.waitStepOutput?.target}`
+  } else {
+    throw new Error("Encountered unexpected workflow step type");
+  }
 
   const runtime = calculateTimeDifference(
     <string>workflow.createTime,
@@ -135,7 +142,7 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
     console.log(
       "Workflow reached end state - step name: %s %s workflow state: %s runtime: %d seconds",
       step.name,
-      txStepDetails,
+      stepDetails,
       workflow.state,
       runtime,
     );
@@ -143,7 +150,7 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
     console.log(
       "Waiting for workflow to finish - step name: %s %s workflow state: %s runtime: %d seconds",
       step.name,
-      txStepDetails,
+      stepDetails,
       workflow.state,
       runtime,
     );

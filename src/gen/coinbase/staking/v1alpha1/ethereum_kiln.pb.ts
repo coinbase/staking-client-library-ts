@@ -26,11 +26,6 @@ export type EthereumKilnUnstakeParameters = {
   amount?: CoinbaseStakingV1alpha1Common.Amount
 }
 
-export type EthereumKilnClaimRewardsParameters = {
-  stakerAddress?: string
-  integratorContractAddress?: string
-}
-
 export type EthereumKilnClaimStakeParameters = {
   stakerAddress?: string
   integratorContractAddress?: string
@@ -41,7 +36,7 @@ type BaseEthereumKilnStakingParameters = {
 }
 
 export type EthereumKilnStakingParameters = BaseEthereumKilnStakingParameters
-  & OneOf<{ stakeParameters: EthereumKilnStakeParameters; unstakeParameters: EthereumKilnUnstakeParameters; claimRewardsParameters: EthereumKilnClaimRewardsParameters; claimStakeParameters: EthereumKilnClaimStakeParameters }>
+  & OneOf<{ stakeParameters: EthereumKilnStakeParameters; unstakeParameters: EthereumKilnUnstakeParameters; claimStakeParameters: EthereumKilnClaimStakeParameters }>
 
 export type EthereumKilnStakingContextParameters = {
   integratorContractAddress?: string

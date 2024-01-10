@@ -912,25 +912,6 @@
       },
       "description": "A Contract resource, which represents an active contract\nfor the given protocol network which you can submit an action\nto."
     },
-    "v1alpha1EthereumKilnClaimRewardsParameters": {
-      "type": "object",
-      "properties": {
-        "stakerAddress": {
-          "type": "string",
-          "description": "The address you wish to claim rewards for."
-        },
-        "integratorContractAddress": {
-          "type": "string",
-          "description": "The address of the integrator contract."
-        }
-      },
-      "description": "The parameters required for the claim rewards action on Ethereum Kiln.",
-      "title": "EthereumKiln: Claim Rewards Parameters",
-      "required": [
-        "stakerAddress",
-        "integratorContractAddress"
-      ]
-    },
     "v1alpha1EthereumKilnClaimStakeParameters": {
       "type": "object",
       "properties": {
@@ -1026,10 +1007,6 @@
         "unstakeParameters": {
           "$ref": "#/definitions/v1alpha1EthereumKilnUnstakeParameters",
           "description": "The parameters for unstake action on Ethereum Kiln."
-        },
-        "claimRewardsParameters": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnClaimRewardsParameters",
-          "description": "The parameters for claim rewards action on Ethereum Kiln."
         },
         "claimStakeParameters": {
           "$ref": "#/definitions/v1alpha1EthereumKilnClaimStakeParameters",

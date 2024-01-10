@@ -36,9 +36,6 @@ To test that your API Key gives you access as expected to the Staking APIs:
             name: 'protocols/ethereum_kiln/networks/goerli/actions/unstake'
          },
          {
-            name: 'protocols/ethereum_kiln/networks/goerli/actions/claim_rewards'
-         },
-         {
             name: 'protocols/ethereum_kiln/networks/goerli/actions/claim_stake'
          }
       ]

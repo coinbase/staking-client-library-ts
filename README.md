@@ -1,82 +1,159 @@
-# Staking API Typescript Client Library
+<img src='docs/images/banner.svg' width='1100' alt='Coinbase Staking API'>
 
-[![npm version](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts.svg)](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts)
+# [Coinbase Staking API](https://github.com/coinbase/staking-client-library-ts)
 
-This repository contains the Protocol Buffer definitions for the Coinbase **Staking API**, as well as the Typescript client libraries generated from them.
+> Programmatic access to Coinbase's best-in-class staking infrastructure and services. :large_blue_circle:
+
+[![npm version](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts.svg)](https://badge.fury.io/js/@coinbase%2Fstaking-client-library-ts) [![Current version](https://img.shields.io/github/tag/coinbase/staking-client-library-ts?color=3498DB&label=version)](https://github.com/coinbase/staking-client-library-ts/releases) [![GitHub contributors](https://img.shields.io/github/contributors/coinbase/staking-client-library-ts?color=3498DB)](https://github.com/coinbase/staking-client-library-ts/graphs/contributors) [![GitHub Stars](https://img.shields.io/github/stars/coinbase/staking-client-library-ts.svg?color=3498DB)](https://github.com/coinbase/staking-client-library-ts/stargazers) [![GitHub](https://img.shields.io/github/license/coinbase/staking-client-library-ts?color=3498DB)](https://github.com/coinbase/staking-client-library-ts/blob/main/LICENSE)
 
 ## Overview
 
-Staking API provides a set of APIs to aid in non-custodial staking for multiple protocols and networks.
+`staking-client-library-ts` is the Typescript SDK for the **Coinbase Staking API** :large_blue_circle:.
 
-## Prerequisites
+The Coinbase Staking API empowers developers to deliver a fully-featured staking experience in their Web2 apps, wallets, or dApps using *one common interface* across protocols.
 
-- [Node 18.12.0 or higher](https://nodejs.org/en/blog/release/v18.12.0)
+A traditional infrastructure-heavy staking integration can take months. Coinbase's Staking API enables onboarding within hours :sparkles:.
 
-## Repository Structure
-- [`src/auth/`](./src/auth/) contains the authentication-related code for accessing Coinbase Cloud APIs.
-- [`src/client/`](./src/client/) contains client instantiation helpers for Staking APIs.
-- [`src/gen/`](./src/gen/) contains Typescript code generated from the Protocol Buffers.
-- [`src/examples/`](./src/examples/) contains examples to consume the client library.
+## Quick Start
 
-## Get Started
-To test that your API Key gives you access as expected to the Staking APIs:
+Prerequisite: [Node 18.12+](https://nodejs.org/en/blog/release/v18.12.0)
 
-1. Clone this GitHub repo
-2. Download your API key from the Coinbase Cloud UI and save it as `.coinbase_cloud_api_key.json` at the root of this repo
-3. Run `npm install && npm run build`
-4. Run `ts-node src/examples/public/example.ts`
-5. You should see output like the following:
+1. Install this package: `npm install @coinbase/staking-client-library-ts`
+2. Create and download an API key from the [Cloud Platform](https://portal.cloud.coinbase.com/access/api).
+3. Place the key named `.coinbase_cloud_api_key.json` at the root of this repository.
+4. Run one of the code samples [below](#stake-partial-eth-💠) or any of our [provided examples](./examples/) :rocket:.
+
+### Stake Partial ETH :diamond_shape_with_a_dot_inside:
+
+This code sample creates an ETH staking workflow. View the full code sample [here](examples/ethereum/create-workflow.ts)
+
+<details open>
+  <summary>Code Sample</summary>
+
+```typescript
+// examples/ethereum/create-workflow.ts
+import { StakingClient } from "@coinbase/staking-client-library-ts";
+
+const client = new StakingClient();
+
+client.Ethereum.stake(
+  'your-project-id', // replace with your project id
+  'holesky',
+  true,
+  'your-wallet-address', // replace with your wallet address
+  '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b',
+  '123',
+)
+  .then((workflow) => {
+    console.log('Workflow created %s', workflow.name);
+  })
+  .catch(() => {
+    throw new Error(`Error creating workflow`);
+  });
+```
+
+</details>
+
+   <details>
+     <summary>Output</summary>
+
    ```text
+   Workflow created: projects/62376b2f-3f24-42c9-9025-d576a3c06d6f/workflows/ffbf9b45-c57b-49cb-a4d5-fdab66d8cb25
+   ```
+
+   </details>
+
+### View Ethereum Rewards :moneybag:
+
+This code sample returns rewards for an Ethereum validator address. View the full code sample [here](examples/ethereum/list-rewards.ts).
+
+<details open>
+  <summary>Code Sample</summary>
+
+```typescript
+import { StakingClient } from "@coinbase/staking-client-library-ts";
+
+// Defines which address and rewards we want to see
+const address: string =
+  '0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474';
+const filter: string = `address='${address}' AND period_end_time > '2024-02-25T00:00:00Z' AND period_end_time < '2024-02-27T00:00:00Z'`;
+
+const client = new StakingClient();
+
+// Loops through rewards array and prints each reward
+client.Ethereum.listRewards(filter).then((resp) => {
+  resp.rewards!.forEach((reward) => {
+    console.log(JSON.stringify(reward, null, 2));
+  });
+});
+```
+
+</details>
+
+   <details>
+     <summary>Output</summary>
+
+   ```json
    {
-      actions: [
+      "address": "0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474",
+      "date": "2024-02-25",
+      "aggregationUnit": "DAY",
+      "periodStartTime": "2024-02-25T00:00:00Z",
+      "periodEndTime": "2024-02-25T23:59:59Z",
+      "totalEarnedNativeUnit": {
+         "amount": "0.002183619",
+         "exp": "18",
+         "ticker": "ETH",
+         "rawNumeric": "2183619000000000"
+      },
+      "totalEarnedUsd": [
          {
-            name: 'protocols/ethereum_kiln/networks/goerli/actions/stake'
-         },
-         {
-            name: 'protocols/ethereum_kiln/networks/goerli/actions/unstake'
-         },
-         {
-            name: 'protocols/ethereum_kiln/networks/goerli/actions/claim_stake'
+            "source": "COINBASE_EXCHANGE",
+            "conversionTime": "2024-02-26T00:09:00Z",
+            "amount": {
+               "amount": "6.79",
+               "exp": "2",
+               "ticker": "USD",
+               "rawNumeric": "679"
+            },
+            "conversionPrice": "3105.780029"
          }
-      ]
+      ],
+      "endingBalance": null,
+      "protocol": "ethereum"
    }
    {
-      protocols: [
+      "address": "0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474",
+      "date": "2024-02-26",
+      "aggregationUnit": "DAY",
+      "periodStartTime": "2024-02-26T00:00:00Z",
+      "periodEndTime": "2024-02-26T23:59:59Z",
+      "totalEarnedNativeUnit": {
+         "amount": "0.002182946",
+         "exp": "18",
+         "ticker": "ETH",
+         "rawNumeric": "2182946000000000"
+      },
+      "totalEarnedUsd": [
          {
-            name: 'protocols/ethereum_kiln'
+            "source": "COINBASE_EXCHANGE",
+            "conversionTime": "2024-02-27T00:09:00Z",
+            "amount": {
+               "amount": "6.94",
+               "exp": "2",
+               "ticker": "USD",
+               "rawNumeric": "694"
+            },
+            "conversionPrice": "3178.889893"
          }
-      ]
-   }
-   {
-      networks: [
-         {
-            name: 'protocols/ethereum_kiln/networks/goerli',
-            isMainnet: false
-         },
-         {
-            name: 'protocols/ethereum_kiln/networks/mainnet',
-            isMainnet: true
-         }
-      ]
+      ],
+      "endingBalance": null,
+      "protocol": "ethereum"
    }
    ```
 
-## Running example from your application
+   </details>
 
-1. Install this package in your application - `npm install @coinbase/staking-client-library-ts`
-2. Add your API key to the root of your application as `.coinbase_cloud_api_key.json`
-3. Run example code:
+## Documentation
 
-   ```typescript
-   import { StakingServiceClient } from "@coinbase/staking-client-library-ts";
-   
-   const client = new StakingServiceClient();
-   
-   const exampleFunction = () => {
-        client.listProtocols().then((response) => {
-            console.log(response);
-        });
-   };
-   
-   exampleFunction();
-   ```
+There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cloud.coinbase.com/) for detailed definitions, API specifications, integration guides, and more!

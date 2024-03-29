@@ -1,41 +1,41 @@
-import { TxSignerFactory } from "../../signers";
+import { TxSignerFactory } from '../../src/signers';
 import {
-  StakingServiceClient,
+  StakingClient,
   workflowHasFinished,
   workflowWaitingForSigning,
   workflowWaitingForExternalBroadcast,
   isTxStepOutput,
   isWaitStepOutput,
-} from "../../client/staking-service-client";
-import { Workflow } from "../../gen/coinbase/staking/v1alpha1/workflow.pb";
-import { calculateTimeDifference } from "../../utils/date";
+} from '../../src/client/staking-client';
+import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
+import { calculateTimeDifference } from '../../src/utils/date';
 
-const projectId: string = ""; // replace with your project id
-const privateKey: string = ""; // replace with your private key
-const stakerAddress: string = ""; // replace with your staker address
-const integrationAddress: string = "0x0a868e4e07a0a00587a783720b76fad9f7eea009"; // replace with your integration address
-const amount: string = "123"; // replace with your amount
-const network: string = "goerli"; // replace with your network
+const projectId: string = ''; // replace with your project id
+const privateKey: string = ''; // replace with your private key
+const stakerAddress: string = ''; // replace with your staker address
+const integrationAddress: string = '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b'; // replace with your integration address
+const amount: string = '123'; // replace with your amount
+const network: string = 'holesky'; // replace with your network
 
-const client = new StakingServiceClient();
+const client = new StakingClient();
 
-const signer = TxSignerFactory.getSigner("ethereum");
+const signer = TxSignerFactory.getSigner('ethereum');
 
 async function stakePartialEth(): Promise<void> {
-  if (projectId === "" || privateKey === "" || stakerAddress === "") {
+  if (projectId === '' || privateKey === '' || stakerAddress === '') {
     throw new Error(
-      "Please set the projectId, privateKey and stakerAddress variables in this file",
+      'Please set the projectId, privateKey and stakerAddress variables in this file',
     );
   }
 
-  let unsignedTx = "";
+  let unsignedTx = '';
   let workflow: Workflow = {} as Workflow;
   let currentStepId: number | undefined;
   let workflowId: string;
 
   try {
     // Create a new eth kiln stake workflow
-    workflow = await client.EthereumKiln.stake(
+    workflow = await client.Ethereum.stake(
       projectId,
       network,
       false,
@@ -44,19 +44,22 @@ async function stakePartialEth(): Promise<void> {
       amount,
     );
 
-    workflowId = workflow.name?.split("/").pop() || "";
-    if (workflowId == null || workflowId === "") {
-      throw new Error("Unexpected workflow state. workflowId is null");
+    workflowId = workflow.name?.split('/').pop() || '';
+    if (workflowId == null || workflowId === '') {
+      throw new Error('Unexpected workflow state. workflowId is null');
     }
 
     currentStepId = workflow.currentStepId;
     if (currentStepId == null) {
-      throw new Error("Unexpected workflow state. currentStepId is null");
+      throw new Error('Unexpected workflow state. currentStepId is null');
     }
 
-    console.log("Workflow created %s ...", workflow.name);
-  } catch (error: any) {
-    throw new Error(`Error creating workflow: ${error.message}`);
+    console.log('Workflow created %s ...', workflow.name);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Error creating workflow: ${error.message}`);
+    }
+    throw new Error(`Error creating workflow`);
   }
 
   // Loop until the workflow has reached an end state.
@@ -68,25 +71,28 @@ async function stakePartialEth(): Promise<void> {
     // Note: In this example, we just log this message as the wallet provider needs to implement this logic.
     try {
       workflow = await client.getWorkflow(projectId, workflowId);
-    } catch (error: any) {
+    } catch (error) {
       // TODO: add retry logic for network errors
-      throw new Error(`Error getting workflow: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Error creating workflow: ${error.message}`);
+      }
     }
 
     await printWorkflowProgressDetails(workflow);
 
     if (workflowWaitingForSigning(workflow)) {
       unsignedTx =
-        workflow.steps![currentStepId].txStepOutput?.unsignedTx || "";
-      if (unsignedTx === "") {
-        console.log("Waiting for unsigned tx to be available ...");
+        workflow.steps![currentStepId].txStepOutput?.unsignedTx || '';
+      if (unsignedTx === '') {
+        console.log('Waiting for unsigned tx to be available ...');
         await new Promise((resolve) => setTimeout(resolve, 1000)); // sleep for 1 second
         continue;
       }
 
-      console.log("Signing unsigned tx %s ...", unsignedTx);
+      console.log('Signing unsigned tx %s ...', unsignedTx);
       const signedTx = await signer.signTransaction(privateKey, unsignedTx);
-      console.log("Returning back signed tx %s ...", signedTx);
+
+      console.log('Returning back signed tx %s ...', signedTx);
 
       workflow = await client.performWorkflowStep(
         projectId,
@@ -96,12 +102,12 @@ async function stakePartialEth(): Promise<void> {
       );
     } else if (workflowWaitingForExternalBroadcast(workflow)) {
       console.log(
-        "Please sign and broadcast this unsigned tx %s externally and return back the tx hash via the PerformWorkflowStep API ...",
+        'Please sign and broadcast this unsigned tx %s externally and return back the tx hash via the PerformWorkflowStep API ...',
         unsignedTx,
       );
       break;
     } else if (workflowHasFinished(workflow)) {
-      console.log("Workflow completed with state %s ...", workflow.state);
+      console.log('Workflow completed with state %s ...', workflow.state);
       break;
     }
 
@@ -111,26 +117,27 @@ async function stakePartialEth(): Promise<void> {
 
 async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
   if (workflow.steps == null || workflow.steps.length === 0) {
-    console.log("Waiting for steps to be created ...");
+    console.log('Waiting for steps to be created ...');
     await new Promise((resolve) => setTimeout(resolve, 1000)); // sleep for 1 second
     return;
   }
 
   const currentStepId = workflow.currentStepId;
+
   if (currentStepId == null) {
     return;
   }
 
   const step = workflow.steps[currentStepId];
 
-  let stepDetails = "";
+  let stepDetails = '';
 
   if (isTxStepOutput(step)) {
     stepDetails = `state: ${step.txStepOutput?.state} tx hash: ${step.txStepOutput?.txHash}`;
   } else if (isWaitStepOutput(step)) {
-    stepDetails = `state: ${step.waitStepOutput?.state}} current: ${step.waitStepOutput?.current}} target: ${step.waitStepOutput?.target}`
+    stepDetails = `state: ${step.waitStepOutput?.state}} current: ${step.waitStepOutput?.current}} target: ${step.waitStepOutput?.target}`;
   } else {
-    throw new Error("Encountered unexpected workflow step type");
+    throw new Error('Encountered unexpected workflow step type');
   }
 
   const runtime = calculateTimeDifference(
@@ -140,7 +147,7 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
 
   if (workflowHasFinished(workflow)) {
     console.log(
-      "Workflow reached end state - step name: %s %s workflow state: %s runtime: %d seconds",
+      'Workflow reached end state - step name: %s %s workflow state: %s runtime: %d seconds',
       step.name,
       stepDetails,
       workflow.state,
@@ -148,7 +155,7 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
     );
   } else {
     console.log(
-      "Waiting for workflow to finish - step name: %s %s workflow state: %s runtime: %d seconds",
+      'Waiting for workflow to finish - step name: %s %s workflow state: %s runtime: %d seconds',
       step.name,
       stepDetails,
       workflow.state,
@@ -159,8 +166,8 @@ async function printWorkflowProgressDetails(workflow: Workflow): Promise<void> {
 
 stakePartialEth()
   .then(() => {
-    console.log("Done staking eth");
+    console.log('Done staking eth');
   })
   .catch((error) => {
-    console.error("Error staking eth: ", error.message);
+    console.error('Error staking eth: ', error.message);
   });

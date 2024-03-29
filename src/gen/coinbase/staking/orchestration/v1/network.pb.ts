@@ -5,7 +5,6 @@
 */
 export type Network = {
   name?: string
-  isMainnet?: boolean
 }
 
 export type ListNetworksRequest = {

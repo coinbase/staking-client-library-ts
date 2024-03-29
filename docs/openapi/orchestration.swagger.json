@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Coinbase Non-Custodial Staking API",
-    "description": "Staking Service is a non-custodial staking service that aims to support multiple protocols and actions on them.",
-    "version": "v1alpha1"
+    "title": "Orchestration Service",
+    "description": "Service that can power non-custodial staking experiences for your users.",
+    "version": "v1"
   },
   "tags": [
     {
@@ -15,12 +15,16 @@
       "description": "Networks details"
     },
     {
-      "name": "Validator",
-      "description": "Validators details"
-    },
-    {
       "name": "Action",
       "description": "Actions details"
+    },
+    {
+      "name": "StakingTarget",
+      "description": "Staking targets details"
+    },
+    {
+      "name": "StakingContext",
+      "description": "Staking context details"
     },
     {
       "name": "Workflow",
@@ -42,7 +46,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1alpha1/protocols": {
+    "/v1/protocols": {
       "get": {
         "summary": "List supported protocols",
         "description": "List supported protocols",
@@ -51,7 +55,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListProtocolsResponse"
+              "$ref": "#/definitions/v1ListProtocolsResponse"
             }
           },
           "400": {
@@ -102,7 +106,7 @@
         ]
       }
     },
-    "/api/v1alpha1/viewStakingContext:view": {
+    "/v1/viewStakingContext:view": {
       "get": {
         "summary": "Returns point-in-time context of staking data for an address",
         "description": "Returns point-in-time context of staking data for an address",
@@ -111,7 +115,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ViewStakingContextResponse"
+              "$ref": "#/definitions/v1ViewStakingContextResponse"
             }
           },
           "400": {
@@ -185,7 +189,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{name}": {
+    "/v1/{name}": {
       "get": {
         "summary": "Get workflow",
         "operationId": "getWorkflow",
@@ -193,7 +197,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Workflow"
+              "$ref": "#/definitions/v1Workflow"
             }
           },
           "400": {
@@ -254,96 +258,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{name}/refresh": {
-      "post": {
-        "summary": "Refresh the current step in a workflow",
-        "description": "Refresh the current step in a workflow",
-        "operationId": "refreshWorkflow",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1alpha1Workflow"
-            }
-          },
-          "400": {
-            "description": "The request attempted has invalid parameters",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "401": {
-            "description": "Returned if authentication information is invalid",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "403": {
-            "description": "Returned when a user does not have permission to the resource.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "404": {
-            "description": "Returned when a resource is not found.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "429": {
-            "description": "Returned when a resource limit has been reached.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "500": {
-            "description": "Returned when an internal server error happens.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "description": "The resource name of the workflow.\nFormat: projects/{project}/workflows/{workflow}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+/workflows/[^/]+"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "step": {
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "The index of the step to be refreshed."
-                }
-              },
-              "description": "The request message for RefreshWorkflowStepRequest.",
-              "required": [
-                "step"
-              ]
-            }
-          }
-        ],
-        "tags": [
-          "Workflow"
-        ]
-      }
-    },
-    "/api/v1alpha1/{name}/step": {
+    "/v1/{name}/step": {
       "post": {
         "summary": "Perform the next step in a workflow",
         "description": "Perform the next step in a workflow",
@@ -352,7 +267,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Workflow"
+              "$ref": "#/definitions/v1Workflow"
             }
           },
           "400": {
@@ -412,23 +327,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "step": {
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "The index of the step to be performed."
-                },
-                "data": {
-                  "type": "string",
-                  "description": "Transaction metadata. This is either the signed transaction or transaction hash depending on the workflow's broadcast method."
-                }
-              },
-              "description": "The request message for PerformWorkflowStep.",
-              "required": [
-                "step",
-                "data"
-              ]
+              "$ref": "#/definitions/StakingServicePerformWorkflowStepBody"
             }
           }
         ],
@@ -437,7 +336,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{parent}/actions": {
+    "/v1/{parent}/actions": {
       "get": {
         "summary": "List supported actions",
         "description": "List supported actions",
@@ -446,7 +345,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListActionsResponse"
+              "$ref": "#/definitions/v1ListActionsResponse"
             }
           },
           "400": {
@@ -507,7 +406,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{parent}/networks": {
+    "/v1/{parent}/networks": {
       "get": {
         "summary": "List supported networks",
         "description": "List supported networks",
@@ -516,7 +415,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListNetworksResponse"
+              "$ref": "#/definitions/v1ListNetworksResponse"
             }
           },
           "400": {
@@ -577,7 +476,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{parent}/stakingTargets": {
+    "/v1/{parent}/stakingTargets": {
       "get": {
         "summary": "List supported staking targets",
         "description": "List supported staking targets",
@@ -586,7 +485,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListStakingTargetsResponse"
+              "$ref": "#/definitions/v1ListStakingTargetsResponse"
             }
           },
           "400": {
@@ -662,7 +561,7 @@
         ]
       }
     },
-    "/api/v1alpha1/{parent}/workflows": {
+    "/v1/{parent}/workflows": {
       "get": {
         "summary": "List supported workflows",
         "operationId": "listWorkflows",
@@ -670,7 +569,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListWorkflowsResponse"
+              "$ref": "#/definitions/v1ListWorkflowsResponse"
             }
           },
           "400": {
@@ -727,7 +626,7 @@
           },
           {
             "name": "filter",
-            "description": "[AIP-160](https://google.aip.dev/160) filter\nSupported fields:\n- string delegator_address: \"0x...\"\n- string validator_address: \"0x...\"\n- string action: \"stake\", \"unstake\"\n- string protocol: \"ethereum_kiln\"\n- string network: \"goerli\", \"mainnet\"\n- string amount: \"10000\"\n- string currency: \"ETH\"",
+            "description": "[AIP-160](https://google.aip.dev/160) filter\nSupported fields:\n- string action: \"stake\", \"unstake\"\n- string protocol: \"ethereum_kiln\"\n- string network: \"holesky\", \"mainnet\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -759,7 +658,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Workflow"
+              "$ref": "#/definitions/v1Workflow"
             }
           },
           "400": {
@@ -820,7 +719,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1alpha1Workflow",
+              "$ref": "#/definitions/v1Workflow",
               "required": [
                 "workflow"
               ]
@@ -834,6 +733,37 @@
     }
   },
   "definitions": {
+    "StakeAccountBalanceState": {
+      "type": "string",
+      "enum": [
+        "BALANCE_STATE_UNSPECIFIED",
+        "BALANCE_STATE_INACTIVE",
+        "BALANCE_STATE_ACTIVATING",
+        "BALANCE_STATE_ACTIVE",
+        "BALANCE_STATE_DEACTIVATING"
+      ],
+      "default": "BALANCE_STATE_UNSPECIFIED",
+      "description": "Represents the different states a stake account balance can have.\nUsed to check to see if stake is actively earning rewards or ready to be withdrawn.\n\n - BALANCE_STATE_UNSPECIFIED: The balance is not known.\n - BALANCE_STATE_INACTIVE: The balance is not actively staking.\n - BALANCE_STATE_ACTIVATING: The balance is in a warm up period and will activate in the next epoch.\n - BALANCE_STATE_ACTIVE: The balance is actively staking and earning rewards.\n - BALANCE_STATE_DEACTIVATING: The balance is in a cool down period and will be deactivated in the next epoch."
+    },
+    "StakingServicePerformWorkflowStepBody": {
+      "type": "object",
+      "properties": {
+        "step": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The index of the step to be performed."
+        },
+        "data": {
+          "type": "string",
+          "description": "Transaction metadata. This is either the signed transaction or transaction hash depending on the workflow's broadcast method."
+        }
+      },
+      "description": "The request message for PerformWorkflowStep.",
+      "required": [
+        "step",
+        "data"
+      ]
+    },
     "WaitStepOutputWaitUnit": {
       "type": "string",
       "enum": [
@@ -874,17 +804,17 @@
         }
       }
     },
-    "v1alpha1Action": {
+    "v1Action": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "The resource name of the Action.\nFormat: protocols/{protocolName}/networks/{networkName}/actions/{actionName}\nEx: protocols/polygon/networks/goerli/validators/stake"
+          "title": "The resource name of the Action.\nFormat: protocols/{protocolName}/networks/{networkName}/actions/{actionName}\nEx: protocols/ethereum_kiln/networks/holesky/validators/stake"
         }
       },
-      "description": "An Action resource, which represents an action you may take on a network,\nposted to a validator (e.g. stake, unstake)."
+      "description": "An Action resource represents an action you may take on a network (e.g. stake, unstake)."
     },
-    "v1alpha1Amount": {
+    "v1Amount": {
       "type": "object",
       "properties": {
         "value": {
@@ -898,12 +828,12 @@
       },
       "description": "The amount of a token you wish to perform an action\nwith."
     },
-    "v1alpha1Contract": {
+    "v1Contract": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "The resource name of the Contract Address.\nFormat: protocols/{protocolName}/networks/{networkName}/stakingTargets/{contractName}\nEx: protocols/polygon/networks/goerli/stakingTargets/0x857679d69fE50E7B722f94aCd2629d80C355163d"
+          "title": "The resource name of the Contract Address.\nFormat: protocols/{protocolName}/networks/{networkName}/stakingTargets/{contractName}\nEx: protocols/ethereum_kiln/networks/holesky/stakingTargets/0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b"
         },
         "address": {
           "type": "string",
@@ -912,7 +842,7 @@
       },
       "description": "A Contract resource, which represents an active contract\nfor the given protocol network which you can submit an action\nto."
     },
-    "v1alpha1EthereumKilnClaimStakeParameters": {
+    "v1EthereumKilnClaimStakeParameters": {
       "type": "object",
       "properties": {
         "stakerAddress": {
@@ -931,7 +861,7 @@
         "integratorContractAddress"
       ]
     },
-    "v1alpha1EthereumKilnStakeParameters": {
+    "v1EthereumKilnStakeParameters": {
       "type": "object",
       "properties": {
         "stakerAddress": {
@@ -943,7 +873,7 @@
           "description": "The address of the integrator contract."
         },
         "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The amount of Ethereum to stake in wei."
         }
       },
@@ -955,38 +885,38 @@
         "amount"
       ]
     },
-    "v1alpha1EthereumKilnStakingContextDetails": {
+    "v1EthereumKilnStakingContextDetails": {
       "type": "object",
       "properties": {
         "ethereumBalance": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The Ethereum balance of the address.\nThis can be used to gate the stake action to make sure the requested stake amount\nis less than ethereum_balance."
         },
         "integratorShareBalance": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The number of integrator shares owned by the address."
         },
         "integratorShareUnderlyingBalance": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "title": "The total Ethereum you can exchange for your integrator shares.\nThis can be used to gate the unstake action to make sure the requested unstake amount\nis less than integrator_share_underlying_balance"
         },
         "totalExitableEth": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The total amount of Ethereum you can redeem for all non-claimed vPool shares.\nThis along with the condition total_shares_pending_exit == fulfillable_share_count\ncan be used to gate the claim_stake action."
         },
         "totalSharesPendingExit": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The number of vPool shares are eligible to receive now or at a later point in time."
         },
         "fulfillableShareCount": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The number of vPool shares you are able to claim now."
         }
       },
       "description": "The protocol specific details for an Ethereum Kiln staking context.",
       "title": "EthereumKiln: Staking context details"
     },
-    "v1alpha1EthereumKilnStakingContextParameters": {
+    "v1EthereumKilnStakingContextParameters": {
       "type": "object",
       "properties": {
         "integratorContractAddress": {
@@ -997,26 +927,26 @@
       "description": "The protocol specific parameters required for fetching a staking context.",
       "title": "EthereumKiln: Staking Context Parameters"
     },
-    "v1alpha1EthereumKilnStakingParameters": {
+    "v1EthereumKilnStakingParameters": {
       "type": "object",
       "properties": {
         "stakeParameters": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnStakeParameters",
+          "$ref": "#/definitions/v1EthereumKilnStakeParameters",
           "description": "The parameters for stake action on Ethereum Kiln."
         },
         "unstakeParameters": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnUnstakeParameters",
+          "$ref": "#/definitions/v1EthereumKilnUnstakeParameters",
           "description": "The parameters for unstake action on Ethereum Kiln."
         },
         "claimStakeParameters": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnClaimStakeParameters",
+          "$ref": "#/definitions/v1EthereumKilnClaimStakeParameters",
           "description": "The parameters for claim stake action on Ethereum Kiln."
         }
       },
       "description": "The parameters needed for staking on Ethereum via Kiln.",
       "title": "EthereumKiln: Staking Parameters"
     },
-    "v1alpha1EthereumKilnUnstakeParameters": {
+    "v1EthereumKilnUnstakeParameters": {
       "type": "object",
       "properties": {
         "stakerAddress": {
@@ -1028,7 +958,7 @@
           "description": "The address of the integrator contract."
         },
         "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
+          "$ref": "#/definitions/v1Amount",
           "description": "The amount of Ethereum to unstake in wei."
         }
       },
@@ -1040,56 +970,56 @@
         "amount"
       ]
     },
-    "v1alpha1ListActionsResponse": {
+    "v1ListActionsResponse": {
       "type": "object",
       "properties": {
         "actions": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Action"
+            "$ref": "#/definitions/v1Action"
           },
           "description": "The list of actions."
         }
       },
       "description": "The response message for ListActions."
     },
-    "v1alpha1ListNetworksResponse": {
+    "v1ListNetworksResponse": {
       "type": "object",
       "properties": {
         "networks": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Network"
+            "$ref": "#/definitions/v1Network"
           },
           "description": "The list of networks."
         }
       },
       "description": "The response message for ListNetworks."
     },
-    "v1alpha1ListProtocolsResponse": {
+    "v1ListProtocolsResponse": {
       "type": "object",
       "properties": {
         "protocols": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Protocol"
+            "$ref": "#/definitions/v1Protocol"
           },
           "description": "The list of protocols."
         }
       },
       "description": "The response message for ListProtocols."
     },
-    "v1alpha1ListStakingTargetsResponse": {
+    "v1ListStakingTargetsResponse": {
       "type": "object",
       "properties": {
         "stakingTargets": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1StakingTarget"
+            "$ref": "#/definitions/v1StakingTarget"
           },
           "description": "The list of staking targets."
         },
@@ -1100,14 +1030,14 @@
       },
       "description": "The response message for ListStakingTargets."
     },
-    "v1alpha1ListWorkflowsResponse": {
+    "v1ListWorkflowsResponse": {
       "type": "object",
       "properties": {
         "workflows": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Workflow"
+            "$ref": "#/definitions/v1Workflow"
           },
           "description": "The list of workflows."
         },
@@ -1118,384 +1048,205 @@
       },
       "description": "The response message for ListWorkflows."
     },
-    "v1alpha1Network": {
+    "v1Network": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "The resource name of the Network.\nFormat: protocols/{protocolName}/networks/{networkName}\nEx: protocols/polygon/networks/goerli"
-        },
-        "isMainnet": {
-          "type": "boolean",
-          "description": "Represents if the network is the mainnet network\nfor the given protocol."
+          "title": "The resource name of the Network.\nFormat: protocols/{protocolName}/networks/{networkName}\nEx: protocols/ethereum_kiln/networks/holesky"
         }
       },
-      "title": "A Network resource, which represents a blockchain network.\n(e.g. mainnet, testnet, etc.)"
+      "description": "A Network resource represents a blockchain network e.g. mainnet, testnet, etc."
     },
-    "v1alpha1NonceOptions": {
+    "v1PriorityFee": {
       "type": "object",
       "properties": {
-        "nonce": {
+        "computeUnitLimit": {
           "type": "string",
-          "description": "The blockhash stored in the nonce account."
+          "format": "int64",
+          "description": "The maximum number of compute units a transaction is allowed to consume."
         },
-        "nonceAccount": {
+        "unitPrice": {
           "type": "string",
-          "description": "The address of the nonce account."
-        },
-        "nonceAuthority": {
-          "type": "string",
-          "description": "The address of the nonce authority. If not provided, defaults to the nonce_account_address. Signs the transaction."
+          "format": "int64",
+          "description": "The price to pay per compute unit."
         }
       },
-      "description": "The parameters required to use a durable transaction nonce for Solana transactions.",
-      "title": "Solana: Nonce Options"
+      "description": "A prioritization fee that can be added to a Solana transaction."
     },
-    "v1alpha1PolygonClaimRewardsParameters": {
+    "v1Protocol": {
       "type": "object",
       "properties": {
-        "delegatorAddress": {
+        "name": {
           "type": "string",
-          "description": "The public address of the delegator you wish to\ninteract with."
+          "title": "The resource name of the Protocol.\nFormat: protocols/{protocolName}\nEx: protocols/ethereum_kiln"
+        }
+      },
+      "description": "A Protocol resource (e.g. ethereum_kiln, solana etc.)."
+    },
+    "v1SolanaClaimStakeParameters": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": "The address which is the signing authority to claim stake."
+        },
+        "stakeAccountAddress": {
+          "type": "string",
+          "description": "The address of the stake account to claim stake from."
+        },
+        "priorityFee": {
+          "$ref": "#/definitions/v1PriorityFee",
+          "description": "The option to set a priority fee for the transaction."
+        }
+      },
+      "description": "The parameters required to perform a claim stake operation on Solana.",
+      "title": "Solana: Claim Stake Parameters"
+    },
+    "v1SolanaStakeParameters": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": "The address where the funds are coming from to stake."
         },
         "validatorAddress": {
           "type": "string",
-          "description": "The public address of the validator you wish to\nperform the action to."
-        }
-      },
-      "description": "The parameters required for claim rewards action on Polygon.",
-      "title": "The parameters needed to claim rewards on Polygon.",
-      "required": [
-        "delegatorAddress",
-        "validatorAddress"
-      ]
-    },
-    "v1alpha1PolygonRestakeParameters": {
-      "type": "object",
-      "properties": {
-        "delegatorAddress": {
-          "type": "string",
-          "description": "The public address of the delegator you wish to\ninteract with."
-        },
-        "validatorAddress": {
-          "type": "string",
-          "description": "The public address of the validator you wish to\nperform the action to."
-        }
-      },
-      "description": "The parameters required for unstake action on Polygon.",
-      "title": "The parameters needed to restake on Polygon.",
-      "required": [
-        "delegatorAddress",
-        "validatorAddress"
-      ]
-    },
-    "v1alpha1PolygonStakeParameters": {
-      "type": "object",
-      "properties": {
-        "delegatorAddress": {
-          "type": "string",
-          "description": "The public address of the delegator you wish to\ninteract with."
-        },
-        "validatorAddress": {
-          "type": "string",
-          "description": "The public address of the validator you wish to\nperform the action to."
+          "description": "The address of the validator."
         },
         "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
-          "description": "The amount of the asset. For native assets or ERC-20 contracts, this is presented in terms of\natomic units (e.g., Wei for Ether) as a base-10 number."
+          "$ref": "#/definitions/v1Amount",
+          "title": "The amount of Solana to stake in lamports. (1 lamport = 0.000000001 SOL)"
+        },
+        "priorityFee": {
+          "$ref": "#/definitions/v1PriorityFee",
+          "description": "The option to set a priority fee for the transaction."
         }
       },
-      "description": "The parameters required for stake action on Polygon.",
-      "title": "The parameters needed to stake on Polygon.",
-      "required": [
-        "delegatorAddress",
-        "validatorAddress",
-        "amount"
-      ]
+      "description": "The parameters required to perform a stake operation on Solana.",
+      "title": "Solana: Stake Parameters"
     },
-    "v1alpha1PolygonStakingParameters": {
+    "v1SolanaStakingContextDetails": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "$ref": "#/definitions/v1Amount",
+          "description": "The total balance of the main wallet address (system account).\nUsed to check the balance for any future staking or transaction to send."
+        },
+        "currentEpoch": {
+          "type": "string",
+          "format": "int64",
+          "description": "The current epoch that the Solana blockchain is in.\nUsed as a frame of reference for future stake activations and deactivations."
+        },
+        "epochCompletionPercentage": {
+          "type": "string",
+          "description": "How much of the epoch has passed as a percentage.\nUsed to inform how much time is left before a stake is activated or deactivated."
+        },
+        "stakeAccounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1StakeAccount"
+          },
+          "description": "The list of staking accounts that are linked to the main wallet address (system account).\nUsed to check for statuses and balances of all stake accounts related to the main wallet address that\nthey're linked to."
+        }
+      },
+      "description": "The protocol specific details for a Solana staking context.",
+      "title": "Solana: Staking Context Details"
+    },
+    "v1SolanaStakingContextParameters": {
+      "type": "object",
+      "description": "The protocol specific parameters required for fetching a staking context.",
+      "title": "Solana: Staking Context Parameters"
+    },
+    "v1SolanaStakingParameters": {
       "type": "object",
       "properties": {
         "stakeParameters": {
-          "$ref": "#/definitions/v1alpha1PolygonStakeParameters",
-          "description": "The parameters for stake action on Polygon."
+          "$ref": "#/definitions/v1SolanaStakeParameters",
+          "description": "The parameters for stake action on Solana."
         },
         "unstakeParameters": {
-          "$ref": "#/definitions/v1alpha1PolygonUnstakeParameters",
-          "description": "The parameters for unstake action on Polygon."
+          "$ref": "#/definitions/v1SolanaUnstakeParameters",
+          "description": "The parameters for unstake action on Solana."
         },
-        "restakeParameters": {
-          "$ref": "#/definitions/v1alpha1PolygonRestakeParameters",
-          "description": "The parameters for restake action on Polygon."
-        },
-        "claimRewardsParameters": {
-          "$ref": "#/definitions/v1alpha1PolygonClaimRewardsParameters",
-          "description": "The parameters for claim rewards action on Polygon."
-        }
-      },
-      "description": "The parameters needed for staking on Polygon."
-    },
-    "v1alpha1PolygonUnstakeParameters": {
-      "type": "object",
-      "properties": {
-        "delegatorAddress": {
-          "type": "string",
-          "description": "The public address of the delegator you wish to\ninteract with."
-        },
-        "validatorAddress": {
-          "type": "string",
-          "description": "The public address of the validator you wish to\nperform the action to."
-        },
-        "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
-          "description": "The amount of the asset. For native assets or ERC-20 contracts, this is presented in terms of\natomic units (e.g., Wei for Ether) as a base-10 number."
-        }
-      },
-      "description": "The parameters required for unstake action on Polygon.",
-      "title": "The parameters needed to unstake on Polygon.",
-      "required": [
-        "delegatorAddress",
-        "validatorAddress",
-        "amount"
-      ]
-    },
-    "v1alpha1Protocol": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "The resource name of the Protocol.\nFormat: protocols/{protocolName}\nEx: protocols/polygon"
-        }
-      },
-      "description": "A Protocol resource (e.g. polygon, ethereum, etc.)."
-    },
-    "v1alpha1SolanaCreateStakeAccountParameters": {
-      "type": "object",
-      "properties": {
-        "stakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the new stake account which will be created. This address must not already exist. Signs the transaction."
-        },
-        "fromAddress": {
-          "type": "string",
-          "description": "The address of the account which will fund the stake account. Pays the transaction fee. Signs the transaction."
-        },
-        "stakeAuthority": {
-          "type": "string",
-          "description": "The address of the account which will be granted signing authority over staking operations on the new stake account. If not provided, defaults to the from_address."
-        },
-        "withdrawAuthority": {
-          "type": "string",
-          "description": "The address of the account which will be granted signing authority over withdrawing inactive stake from the new stake account. If not provided, defaults to the from_address."
-        },
-        "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
-          "description": "The amount to fund the stake account with, in Lamports."
-        },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
-        }
-      },
-      "description": "The parameters required for the create stake account action on Solana.",
-      "title": "Solana: Create Stake Account Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "fromAddress",
-        "amount"
-      ]
-    },
-    "v1alpha1SolanaDeactivateStakeParameters": {
-      "type": "object",
-      "properties": {
-        "stakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the stake account which will have its stake deactivated. Stake must be currently active."
-        },
-        "stakeAuthority": {
-          "type": "string",
-          "description": "The address of the account which has signing authority over staking operations on the stake account. Signs the transaction."
-        },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
-        }
-      },
-      "description": "The parameters required for the deactivate stake action on Solana.",
-      "title": "Solana: Deactivate Stake Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "stakeAuthority"
-      ]
-    },
-    "v1alpha1SolanaDelegateStakeParameters": {
-      "type": "object",
-      "properties": {
-        "stakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the stake account which will be delegating its stake."
-        },
-        "voteAccountAddress": {
-          "type": "string",
-          "description": "The address of the validator's vote account to which the stake will be delegated."
-        },
-        "stakeAuthority": {
-          "type": "string",
-          "description": "The address of the account which has signing authority over staking operations on the stake account. Signs the transaction."
-        },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
-        }
-      },
-      "description": "The parameters required for the delegate stake action on Solana.",
-      "title": "Solana: Delegate Stake Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "voteAccountAddress",
-        "stakeAuthority"
-      ]
-    },
-    "v1alpha1SolanaMergeStakeParameters": {
-      "type": "object",
-      "properties": {
-        "stakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the stake account will be merged into and have stake added to it."
-        },
-        "sourceStakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the source stake account which will have no longer exist after the merge."
-        },
-        "stakeAuthority": {
-          "type": "string",
-          "description": "The address of the account which has signing authority over staking operations on the stake account. Signs the transaction."
-        },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
-        }
-      },
-      "description": "The parameters required for merge stake action on Solana.",
-      "title": "Solana: Merge Stake Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "sourceStakeAccountAddress",
-        "stakeAuthority"
-      ]
-    },
-    "v1alpha1SolanaSplitStakeParameters": {
-      "type": "object",
-      "properties": {
-        "stakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the stake account will be split and have its stake removed."
-        },
-        "newStakeAccountAddress": {
-          "type": "string",
-          "description": "The address of the new stake account which will be created and have the stake added to it."
-        },
-        "stakeAuthority": {
-          "type": "string",
-          "description": "The address of the account which has signing authority over staking operations on the stake account. Signs the transaction."
-        },
-        "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
-          "description": "The amount of stake to split, in Lamports."
-        },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
-        }
-      },
-      "description": "The parameters required for split stake action on Solana.",
-      "title": "Solana: Split Stake Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "newStakeAccountAddress",
-        "stakeAuthority",
-        "amount"
-      ]
-    },
-    "v1alpha1SolanaStakingParameters": {
-      "type": "object",
-      "properties": {
-        "createStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaCreateStakeAccountParameters",
-          "description": "The parameters for create stake account action on Solana."
-        },
-        "delegateStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaDelegateStakeParameters",
-          "description": "The parameters for delegate stake action on Solana."
-        },
-        "deactivateStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaDeactivateStakeParameters",
-          "description": "The parameters for deactivate stake action on Solana."
-        },
-        "withdrawStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaWithdrawStakeParameters",
-          "description": "The parameters for withdraw stake action on Solana."
-        },
-        "splitStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaSplitStakeParameters",
-          "description": "The parameters for split stake action on Solana."
-        },
-        "mergeStakeParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaMergeStakeParameters",
-          "description": "The parameters for merge stake action on Solana."
+        "claimStakeParameters": {
+          "$ref": "#/definitions/v1SolanaClaimStakeParameters",
+          "description": "The parameters for claim stake action on Solana."
         }
       },
       "description": "The parameters needed for staking on Solana.",
       "title": "Solana: Staking Parameters"
     },
-    "v1alpha1SolanaWithdrawStakeParameters": {
+    "v1SolanaUnstakeParameters": {
       "type": "object",
       "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": "The address which is the signing authority to unstake."
+        },
         "stakeAccountAddress": {
           "type": "string",
-          "description": "The address of the stake account from which stake will be withdrawn. Stake must be currently inactive."
-        },
-        "recipientAddress": {
-          "type": "string",
-          "description": "The address of the recipient account which will receive the withdrawn stake."
-        },
-        "withdrawAuthority": {
-          "type": "string",
-          "description": "The address of the account which has signing authority over withdrawing inactive stake from the stake account. Signs the transaction."
+          "description": "The address of the stake account to unstake from."
         },
         "amount": {
-          "$ref": "#/definitions/v1alpha1Amount",
-          "description": "The amount to withdraw from the stake account, in Lamports."
+          "$ref": "#/definitions/v1Amount",
+          "title": "The amount of Solana to unstake in lamports. (1 lamport = 0.000000001 SOL)"
         },
-        "nonceOptions": {
-          "$ref": "#/definitions/v1alpha1NonceOptions",
-          "description": "The parameters required to use a durable transaction nonce for Solana transactions."
+        "priorityFee": {
+          "$ref": "#/definitions/v1PriorityFee",
+          "description": "The option to set a priority fee for the transaction."
         }
       },
-      "description": "The parameters required for the withdraw stake action on Solana.",
-      "title": "Solana: Withdraw Stake Parameters",
-      "required": [
-        "stakeAccountAddress",
-        "recipientAddress",
-        "withdrawAuthority",
-        "amount"
-      ]
+      "description": "The parameters required to perform a unstake operation on Solana.",
+      "title": "Solana: Unstake Parameters"
     },
-    "v1alpha1StakingTarget": {
+    "v1StakeAccount": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "The address of the stake account.\nUsed to hold the staked funds transferred over from the main wallet."
+        },
+        "bondedStake": {
+          "$ref": "#/definitions/v1Amount",
+          "description": "The bonded balance in lamports on the stake account (rent is not included in bonded amount).\nUsed to check the amount that is currently staked."
+        },
+        "rentReserve": {
+          "$ref": "#/definitions/v1Amount",
+          "description": "The rent amount for the stake account in lamports.\nUsed to highlight the amount used as the rent to maintain the address on the Solana blockchain."
+        },
+        "balance": {
+          "$ref": "#/definitions/v1Amount",
+          "description": "The total balance on the address in lamports.\nUsed to check the total balance for the stake account."
+        },
+        "balanceState": {
+          "$ref": "#/definitions/StakeAccountBalanceState",
+          "description": "The balance state of the stake account.\nUsed to show what state the currently staked funds are in.",
+          "readOnly": true
+        },
+        "validator": {
+          "type": "string",
+          "description": "The validator (vote account) that the stake account is assigned to stake to.\nUsed to show where the staked funds are staked to."
+        }
+      },
+      "description": "The balance information for a stake account."
+    },
+    "v1StakingTarget": {
       "type": "object",
       "properties": {
         "validator": {
-          "$ref": "#/definitions/v1alpha1Validator",
+          "$ref": "#/definitions/v1Validator",
           "description": "A validator to stake to."
         },
         "contract": {
-          "$ref": "#/definitions/v1alpha1Contract",
+          "$ref": "#/definitions/v1Contract",
           "description": "A contract to send a staking action to."
         }
       },
       "description": "A Staking Target represents a destination that you perform an action on related to staking."
     },
-    "v1alpha1TxStepOutput": {
+    "v1TxStepOutput": {
       "type": "object",
       "properties": {
         "unsignedTx": {
@@ -1514,7 +1265,7 @@
           "readOnly": true
         },
         "state": {
-          "$ref": "#/definitions/v1alpha1TxStepOutputState",
+          "$ref": "#/definitions/v1TxStepOutputState",
           "description": "The state of the transaction step.",
           "readOnly": true
         },
@@ -1526,7 +1277,7 @@
       },
       "description": "The details of a transaction being constructed and broadcasted to the network."
     },
-    "v1alpha1TxStepOutputState": {
+    "v1TxStepOutputState": {
       "type": "string",
       "enum": [
         "STATE_UNSPECIFIED",
@@ -1540,22 +1291,17 @@
         "STATE_FINALIZED",
         "STATE_FAILED",
         "STATE_SUCCESS",
-        "STATE_CANCELING",
-        "STATE_CANCELED",
-        "STATE_CANCEL_FAILED",
-        "STATE_FAILED_REFRESHABLE",
-        "STATE_REFRESHING",
         "STATE_PENDING_EXT_BROADCAST"
       ],
       "default": "STATE_UNSPECIFIED",
-      "description": "State defines an enumeration of states for a staking transaction.\n\n - STATE_UNSPECIFIED: Unspecified transaction state, this is for backwards compatibility.\n - STATE_NOT_CONSTRUCTED: Tx has not yet been constructed in the backend.\n - STATE_CONSTRUCTED: Tx construction is over in the backend.\n - STATE_PENDING_SIGNING: Tx is waiting to be signed.\n - STATE_SIGNED: Tx has been signed and returned to the backend.\n - STATE_BROADCASTING: Tx is being broadcasted to the network.\n - STATE_CONFIRMING: Tx is waiting for confirmation.\n - STATE_CONFIRMED: Tx has been confirmed to be included in a block.\n - STATE_FINALIZED: Tx has been finalized.\n - STATE_FAILED: Tx construction or broadcasting failed.\n - STATE_SUCCESS: Tx has been successfully executed.\n - STATE_CANCELING: Tx is being canceled.\n - STATE_CANCELED: Tx has been canceled.\n - STATE_CANCEL_FAILED: Tx cancellation failed.\n - STATE_FAILED_REFRESHABLE: Tx failed but can be refreshed.\n - STATE_REFRESHING: Tx is being refreshed.\n - STATE_PENDING_EXT_BROADCAST: Tx is waiting to be externally broadcasted by the customer."
+      "description": "State defines an enumeration of states for a staking transaction.\n\n - STATE_UNSPECIFIED: Unspecified transaction state, this is for backwards compatibility.\n - STATE_NOT_CONSTRUCTED: Tx has not yet been constructed in the backend.\n - STATE_CONSTRUCTED: Tx construction is over in the backend.\n - STATE_PENDING_SIGNING: Tx is waiting to be signed.\n - STATE_SIGNED: Tx has been signed and returned to the backend.\n - STATE_BROADCASTING: Tx is being broadcasted to the network.\n - STATE_CONFIRMING: Tx is waiting for confirmation.\n - STATE_CONFIRMED: Tx has been confirmed to be included in a block.\n - STATE_FINALIZED: Tx has been finalized.\n - STATE_FAILED: Tx construction or broadcasting failed.\n - STATE_SUCCESS: Tx has been successfully executed.\n - STATE_PENDING_EXT_BROADCAST: Tx is waiting to be externally broadcasted by the customer."
     },
-    "v1alpha1Validator": {
+    "v1Validator": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "The resource name of the Validator.\nFormat: protocols/{protocolName}/networks/{networkName}/stakingTargets/{validatorName}\nEx: protocols/polygon/networks/goerli/stakingTargets/0x857679d69fE50E7B722f94aCd2629d80C355163d"
+          "title": "The resource name of the Validator.\nFormat: protocols/{protocolName}/networks/{networkName}/stakingTargets/{validatorName}\nEx: protocols/solana/networks/testnet/stakingTargets/GkqYQysEGmuL6V2AJoNnWZUz2ZBGWhzQXsJiXm2CLKAN"
         },
         "address": {
           "type": "string",
@@ -1569,7 +1315,7 @@
       },
       "description": "A Validator resource represents an active validator for the given protocol network."
     },
-    "v1alpha1ViewStakingContextResponse": {
+    "v1ViewStakingContextResponse": {
       "type": "object",
       "properties": {
         "address": {
@@ -1577,17 +1323,22 @@
           "description": "The address you are getting a staking context for."
         },
         "ethereumKilnStakingContextDetails": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnStakingContextDetails",
+          "$ref": "#/definitions/v1EthereumKilnStakingContextDetails",
           "description": "EthereumKiln staking context details."
+        },
+        "solanaStakingContextDetails": {
+          "$ref": "#/definitions/v1SolanaStakingContextDetails",
+          "description": "Solana staking context details."
         }
       },
       "description": "The response message for the ViewStakingContext request.",
       "required": [
         "address",
-        "ethereumKilnStakingContextDetails"
+        "ethereumKilnStakingContextDetails",
+        "solanaStakingContextDetails"
       ]
     },
-    "v1alpha1WaitStepOutput": {
+    "v1WaitStepOutput": {
       "type": "object",
       "properties": {
         "start": {
@@ -1614,14 +1365,14 @@
           "readOnly": true
         },
         "state": {
-          "$ref": "#/definitions/v1alpha1WaitStepOutputState",
+          "$ref": "#/definitions/v1WaitStepOutputState",
           "description": "The state of the wait step.",
           "readOnly": true
         }
       },
       "description": "The output details of a step where we wait for some kind of on-chain activity to finish like reaching a certain checkpoint, epoch or block."
     },
-    "v1alpha1WaitStepOutputState": {
+    "v1WaitStepOutputState": {
       "type": "string",
       "enum": [
         "STATE_UNSPECIFIED",
@@ -1632,7 +1383,7 @@
       "default": "STATE_UNSPECIFIED",
       "description": "WaitStepState defines an enumeration of states for a wait step.\n\n - STATE_UNSPECIFIED: Unspecified wait step state.\n - STATE_NOT_STARTED: Wait step has not started.\n - STATE_IN_PROGRESS: Wait step is in-progress.\n - STATE_COMPLETED: Wait step completed."
     },
-    "v1alpha1Workflow": {
+    "v1Workflow": {
       "type": "object",
       "properties": {
         "name": {
@@ -1644,20 +1395,16 @@
           "type": "string",
           "title": "The resource name of the action being\nperformed.\nFormat: protocols/{protocol}/networks/{network}/actions/{action}"
         },
-        "polygonStakingParameters": {
-          "$ref": "#/definitions/v1alpha1PolygonStakingParameters",
-          "description": "Polygon staking parameters."
-        },
         "solanaStakingParameters": {
-          "$ref": "#/definitions/v1alpha1SolanaStakingParameters",
+          "$ref": "#/definitions/v1SolanaStakingParameters",
           "description": "Solana staking parameters."
         },
         "ethereumKilnStakingParameters": {
-          "$ref": "#/definitions/v1alpha1EthereumKilnStakingParameters",
+          "$ref": "#/definitions/v1EthereumKilnStakingParameters",
           "description": "EthereumKiln staking parameters."
         },
         "state": {
-          "$ref": "#/definitions/v1alpha1WorkflowState",
+          "$ref": "#/definitions/v1WorkflowState",
           "description": "The current state of the workflow.",
           "readOnly": true
         },
@@ -1671,7 +1418,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1WorkflowStep"
+            "$ref": "#/definitions/v1WorkflowStep"
           },
           "description": "The list of steps for this workflow.",
           "readOnly": true
@@ -1702,12 +1449,11 @@
       "description": "A Workflow resource.",
       "required": [
         "action",
-        "polygonStakingParameters",
         "solanaStakingParameters",
         "ethereumKilnStakingParameters"
       ]
     },
-    "v1alpha1WorkflowState": {
+    "v1WorkflowState": {
       "type": "string",
       "enum": [
         "STATE_UNSPECIFIED",
@@ -1715,17 +1461,13 @@
         "STATE_WAITING_FOR_SIGNING",
         "STATE_COMPLETED",
         "STATE_FAILED",
-        "STATE_CANCELING",
-        "STATE_CANCELED",
-        "STATE_CANCEL_FAILED",
-        "STATE_FAILED_REFRESHABLE",
         "STATE_WAITING_FOR_EXT_BROADCAST"
       ],
       "default": "STATE_UNSPECIFIED",
-      "description": "- STATE_UNSPECIFIED: Unspecified workflow state, this is for backwards compatibility.\n - STATE_IN_PROGRESS: In Progress represents a workflow that is currently in progress.\n - STATE_WAITING_FOR_SIGNING: Waiting for signing represents the workflow is waiting on the consumer to sign and return the corresponding signed tx.\n - STATE_COMPLETED: Completed represents the workflow has completed.\n - STATE_FAILED: Failed represents the workflow has failed.\n - STATE_CANCELING: Canceling represents the workflow is being canceled.\n - STATE_CANCELED: Canceled represents the workflow has been canceled.\n - STATE_CANCEL_FAILED: Cancel failed represents the workflow failed to cancel.\n - STATE_FAILED_REFRESHABLE: Failed refreshable represents the workflow failed but can be refreshed.\n - STATE_WAITING_FOR_EXT_BROADCAST: Waiting for external broadcast represents the workflow is waiting for the customer to broadcast a tx and return its corresponding tx hash.",
-      "title": "The state of a workflow\nExample workflow states:\nIN_PROGRESS -\u003e WAITING_FOR_SIGNING -\u003e IN_PROGRESS -\u003e COMPLETED\n.................................................|-\u003e FAILED\nIN_PROGRESS -\u003e WAITING_FOR_SIGNING -\u003e CANCELING -\u003e CANCELED\n...............................................|-\u003e CANCEL_FAILED"
+      "description": "Example flow: A workflow with skip_broadcast = true leading to a successful completion.\n IN_PROGRESS -\u003e WAITING_FOR_EXT_BROADCAST -\u003e IN_PROGRESS -\u003e COMPLETED\n Example flow: A workflow with skip_broadcast = false leading to a successful completion.\n IN_PROGRESS -\u003e WAITING_FOR_SIGNING -\u003e IN_PROGRESS -\u003e COMPLETED\n Example flow: A workflow with skip_broadcast = false leading to a failure.\n IN_PROGRESS -\u003e WAITING_FOR_SIGNING -\u003e IN_PROGRESS -\u003e FAILED\n\n - STATE_UNSPECIFIED: Unspecified workflow state, this is for backwards compatibility.\n - STATE_IN_PROGRESS: In Progress represents a workflow that is currently in progress.\n - STATE_WAITING_FOR_SIGNING: Waiting for signing represents the workflow is waiting on the consumer to sign and return the corresponding signed tx.\n - STATE_COMPLETED: Completed represents the workflow has completed.\n - STATE_FAILED: Failed represents the workflow has failed.\n - STATE_WAITING_FOR_EXT_BROADCAST: Waiting for external broadcast represents the workflow is waiting for the customer to broadcast a tx and return its corresponding tx hash.",
+      "title": "The state of a workflow"
     },
-    "v1alpha1WorkflowStep": {
+    "v1WorkflowStep": {
       "type": "object",
       "properties": {
         "name": {
@@ -1734,12 +1476,12 @@
           "readOnly": true
         },
         "txStepOutput": {
-          "$ref": "#/definitions/v1alpha1TxStepOutput",
+          "$ref": "#/definitions/v1TxStepOutput",
           "description": "The tx step output (e.g. transaction metadata such as unsigned tx, signed tx etc).",
           "readOnly": true
         },
         "waitStepOutput": {
-          "$ref": "#/definitions/v1alpha1WaitStepOutput",
+          "$ref": "#/definitions/v1WaitStepOutput",
           "description": "The waiting details for any kind like how many checkpoints away for unbonding etc.",
           "readOnly": true
         }

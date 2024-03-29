@@ -4,10 +4,9 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as GoogleProtobufTimestamp from "../../../google/protobuf/timestamp.pb"
-import * as CoinbaseStakingV1alpha1Ethereum_kiln from "./ethereum_kiln.pb"
-import * as CoinbaseStakingV1alpha1Polygon from "./polygon.pb"
-import * as CoinbaseStakingV1alpha1Solana from "./solana.pb"
+import * as GoogleProtobufTimestamp from "../../../../google/protobuf/timestamp.pb"
+import * as CoinbaseStakingOrchestrationV1Ethereum_kiln from "./ethereum_kiln.pb"
+import * as CoinbaseStakingOrchestrationV1Solana from "./solana.pb"
 
 type Absent<T, K extends keyof T> = { [k in Exclude<keyof T, K>]?: undefined };
 type OneOf<T> =
@@ -30,11 +29,6 @@ export enum TxStepOutputState {
   STATE_FINALIZED = "STATE_FINALIZED",
   STATE_FAILED = "STATE_FAILED",
   STATE_SUCCESS = "STATE_SUCCESS",
-  STATE_CANCELING = "STATE_CANCELING",
-  STATE_CANCELED = "STATE_CANCELED",
-  STATE_CANCEL_FAILED = "STATE_CANCEL_FAILED",
-  STATE_FAILED_REFRESHABLE = "STATE_FAILED_REFRESHABLE",
-  STATE_REFRESHING = "STATE_REFRESHING",
   STATE_PENDING_EXT_BROADCAST = "STATE_PENDING_EXT_BROADCAST",
 }
 
@@ -59,10 +53,6 @@ export enum WorkflowState {
   STATE_WAITING_FOR_SIGNING = "STATE_WAITING_FOR_SIGNING",
   STATE_COMPLETED = "STATE_COMPLETED",
   STATE_FAILED = "STATE_FAILED",
-  STATE_CANCELING = "STATE_CANCELING",
-  STATE_CANCELED = "STATE_CANCELED",
-  STATE_CANCEL_FAILED = "STATE_CANCEL_FAILED",
-  STATE_FAILED_REFRESHABLE = "STATE_FAILED_REFRESHABLE",
   STATE_WAITING_FOR_EXT_BROADCAST = "STATE_WAITING_FOR_EXT_BROADCAST",
 }
 
@@ -104,7 +94,7 @@ type BaseWorkflow = {
 }
 
 export type Workflow = BaseWorkflow
-  & OneOf<{ polygonStakingParameters: CoinbaseStakingV1alpha1Polygon.PolygonStakingParameters; solanaStakingParameters: CoinbaseStakingV1alpha1Solana.SolanaStakingParameters; ethereumKilnStakingParameters: CoinbaseStakingV1alpha1Ethereum_kiln.EthereumKilnStakingParameters }>
+  & OneOf<{ solanaStakingParameters: CoinbaseStakingOrchestrationV1Solana.SolanaStakingParameters; ethereumKilnStakingParameters: CoinbaseStakingOrchestrationV1Ethereum_kiln.EthereumKilnStakingParameters }>
 
 export type CreateWorkflowRequest = {
   parent?: string
@@ -131,9 +121,4 @@ export type PerformWorkflowStepRequest = {
   name?: string
   step?: number
   data?: string
-}
-
-export type RefreshWorkflowStepRequest = {
-  name?: string
-  step?: number
 }

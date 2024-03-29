@@ -1,7 +1,6 @@
 # IDE/Tools
 .docker
 .idea
-/.vscode
 # vim
 .*.sw?
 

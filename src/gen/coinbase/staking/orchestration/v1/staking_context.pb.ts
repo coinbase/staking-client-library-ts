@@ -4,7 +4,8 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as CoinbaseStakingV1alpha1Ethereum_kiln from "./ethereum_kiln.pb"
+import * as CoinbaseStakingOrchestrationV1Ethereum_kiln from "./ethereum_kiln.pb"
+import * as CoinbaseStakingOrchestrationV1Solana from "./solana.pb"
 
 type Absent<T, K extends keyof T> = { [k in Exclude<keyof T, K>]?: undefined };
 type OneOf<T> =
@@ -21,7 +22,7 @@ type BaseViewStakingContextRequest = {
 }
 
 export type ViewStakingContextRequest = BaseViewStakingContextRequest
-  & OneOf<{ ethereumKilnStakingContextParameters: CoinbaseStakingV1alpha1Ethereum_kiln.EthereumKilnStakingContextParameters }>
+  & OneOf<{ ethereumKilnStakingContextParameters: CoinbaseStakingOrchestrationV1Ethereum_kiln.EthereumKilnStakingContextParameters; solanaStakingContextParameters: CoinbaseStakingOrchestrationV1Solana.SolanaStakingContextParameters }>
 
 
 type BaseViewStakingContextResponse = {
@@ -29,4 +30,4 @@ type BaseViewStakingContextResponse = {
 }
 
 export type ViewStakingContextResponse = BaseViewStakingContextResponse
-  & OneOf<{ ethereumKilnStakingContextDetails: CoinbaseStakingV1alpha1Ethereum_kiln.EthereumKilnStakingContextDetails }>
+  & OneOf<{ ethereumKilnStakingContextDetails: CoinbaseStakingOrchestrationV1Ethereum_kiln.EthereumKilnStakingContextDetails; solanaStakingContextDetails: CoinbaseStakingOrchestrationV1Solana.SolanaStakingContextDetails }>

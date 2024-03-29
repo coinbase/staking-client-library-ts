@@ -1,10 +1,10 @@
-import { readFileSync } from "fs";
-import { JWK, JWS } from "node-jose";
+import { readFileSync } from 'fs';
+import { JWK, JWS } from 'node-jose';
 
-const legacyPemHeader = "-----BEGIN ECDSA Private Key-----";
-const legacyPemFooter = "-----END ECDSA Private Key-----";
-const pemHeader = "-----BEGIN EC PRIVATE KEY-----";
-const pemFooter = "-----END EC PRIVATE KEY-----";
+const legacyPemHeader = '-----BEGIN ECDSA Private Key-----';
+const legacyPemFooter = '-----END ECDSA Private Key-----';
+const pemHeader = '-----BEGIN EC PRIVATE KEY-----';
+const pemFooter = '-----END EC PRIVATE KEY-----';
 
 /**
  * Build a JWT for the specified service and URI.
@@ -14,10 +14,10 @@ const pemFooter = "-----END EC PRIVATE KEY-----";
  */
 export const buildJWT = async (
   url: string,
-  method = "GET",
+  method = 'GET',
 ): Promise<string> => {
-  const keyFile = readFileSync(".coinbase_cloud_api_key.json", {
-    encoding: "utf8",
+  const keyFile = readFileSync('.coinbase_cloud_api_key.json', {
+    encoding: 'utf8',
   });
   const apiKey: APIKey = JSON.parse(keyFile);
 
@@ -25,18 +25,18 @@ export const buildJWT = async (
   let privateKey: JWK.Key;
 
   try {
-    privateKey = await JWK.asKey(pemPrivateKey, "pem");
-    if (privateKey.kty !== "EC") {
-      throw new Error("Not an EC private key");
+    privateKey = await JWK.asKey(pemPrivateKey, 'pem');
+    if (privateKey.kty !== 'EC') {
+      throw new Error('Not an EC private key');
     }
   } catch (error) {
     throw new Error(`jwt: Could not decode or parse private key. ${error}`);
   }
 
   const header = {
-    alg: "ES256",
+    alg: 'ES256',
     kid: apiKey.name,
-    typ: "JWT",
+    typ: 'JWT',
     nonce: nonce(),
   };
 
@@ -45,18 +45,18 @@ export const buildJWT = async (
 
   const claims: APIKeyClaims = {
     sub: apiKey.name,
-    iss: "coinbase-cloud",
+    iss: 'coinbase-cloud',
     nbf: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 60, // +1 minute
     aud: [audience],
     uri,
   };
 
-  const payload = Buffer.from(JSON.stringify(claims)).toString("utf8");
+  const payload = Buffer.from(JSON.stringify(claims)).toString('utf8');
 
   try {
     const result = await JWS.createSign(
-      { format: "compact", fields: header },
+      { format: 'compact', fields: header },
       privateKey,
     )
       .update(payload)
@@ -103,7 +103,7 @@ interface APIKeyClaims {
  */
 const extractPemKey = (privateKeyString: string): string => {
   // Remove all newline characters
-  privateKeyString = privateKeyString.replace(/\n/g, "");
+  privateKeyString = privateKeyString.replace(/\n/g, '');
 
   // If the string starts with the standard PEM header and footer, return as is.
   if (
@@ -119,12 +119,13 @@ const extractPemKey = (privateKeyString: string): string => {
   );
 
   const match = privateKeyString.match(regex);
+
   if (match && match[1]) {
     return pemHeader + match[1].trim() + pemFooter;
   }
 
   // The string does not match any of the expected formats.
-  throw new Error("wrong format of API private key");
+  throw new Error('wrong format of API private key');
 };
 
 /**
@@ -132,8 +133,9 @@ const extractPemKey = (privateKeyString: string): string => {
  * @returns The generated nonce.
  */
 const nonce = (): string => {
-  const range = "0123456789";
-  let result = "";
+  const range = '0123456789';
+  let result = '';
+
   for (let i = 0; i < 16; i++) {
     result += range.charAt(Math.floor(Math.random() * range.length));
   }
@@ -142,12 +144,12 @@ const nonce = (): string => {
 };
 
 const getAudience = (url: string): string => {
-  if (url.indexOf("staking") > -1) {
-    return "staking";
-  } else if (url.indexOf("rewards") > -1) {
-    return "rewards-reporting";
+  if (url.indexOf('staking') > -1) {
+    return 'staking';
+  } else if (url.indexOf('rewards') > -1) {
+    return 'rewards-reporting';
   } else {
-    return "unknown";
+    return 'unknown';
   }
 };
 
@@ -157,8 +159,9 @@ export const customFetch = async (
 ): Promise<Response> => {
   // remove query parameters
   let url = input.toString();
-  if (url.indexOf("?") > -1) {
-    url = url.substring(0, url.indexOf("?"));
+
+  if (url.indexOf('?') > -1) {
+    url = url.substring(0, url.indexOf('?'));
   }
   const token = await buildJWT(url, init?.method);
   const params = {

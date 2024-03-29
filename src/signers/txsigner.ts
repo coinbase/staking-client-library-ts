@@ -1,4 +1,4 @@
-import { EthereumTransactionSigner } from "./ethereum_signer";
+import { EthereumTransactionSigner } from './ethereum-signer';
 
 export interface TxSigner {
   // eslint-disable-next-line no-unused-vars
@@ -8,11 +8,11 @@ export interface TxSigner {
 export class TxSignerFactory {
   static getSigner(protocol: string): TxSigner {
     switch (protocol) {
-      case "ethereum":
+      case 'ethereum':
         return new EthereumTransactionSigner();
       // other cases for additional protocols
       default:
-        throw new Error("Unsupported protocol");
+        throw new Error('Unsupported protocol');
     }
   }
 }

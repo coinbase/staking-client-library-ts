@@ -1,5 +1,5 @@
-import * as Utils from "./utils/date";
+import * as Utils from './utils/date';
 
 export { Utils };
 
-export { StakingServiceClient } from "./client/staking-service-client";
+export { StakingClient } from './client/staking-client';

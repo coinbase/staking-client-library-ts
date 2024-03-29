@@ -1,43 +1,53 @@
-import { StakingService } from "../gen/coinbase/staking/v1alpha1/api.pb";
+import { StakingService } from '../gen/coinbase/staking/orchestration/v1/api.pb';
+import { RewardService } from '../gen/coinbase/staking/rewards/v1/reward_service.pb';
 import {
   ListProtocolsRequest,
   ListProtocolsResponse,
-} from "../gen/coinbase/staking/v1alpha1/protocol.pb";
+} from '../gen/coinbase/staking/orchestration/v1/protocol.pb';
 import {
   ListNetworksRequest,
   ListNetworksResponse,
-} from "../gen/coinbase/staking/v1alpha1/network.pb";
+} from '../gen/coinbase/staking/orchestration/v1/network.pb';
 import {
   ListActionsRequest,
   ListActionsResponse,
-} from "../gen/coinbase/staking/v1alpha1/action.pb";
-import * as fm from "../gen/fetch.pb";
-import { buildJWT } from "../auth";
+} from '../gen/coinbase/staking/orchestration/v1/action.pb';
+import * as fm from '../gen/fetch.pb';
+import { buildJWT } from '../auth';
 import {
   ViewStakingContextRequest,
   ViewStakingContextResponse,
-} from "../gen/coinbase/staking/v1alpha1/staking_context.pb";
+} from '../gen/coinbase/staking/orchestration/v1/staking_context.pb';
 import {
   CreateWorkflowRequest,
   GetWorkflowRequest,
   ListWorkflowsRequest,
   ListWorkflowsResponse,
   PerformWorkflowStepRequest,
-  RefreshWorkflowStepRequest,
   Workflow,
   WorkflowState,
   WorkflowStep,
   TxStepOutput,
   WaitStepOutput,
-} from "../gen/coinbase/staking/v1alpha1/workflow.pb";
+} from '../gen/coinbase/staking/orchestration/v1/workflow.pb';
+import {
+  ListRewardsRequest,
+  ListRewardsResponse,
+} from '../gen/coinbase/staking/rewards/v1/reward.pb';
+import {
+  ListStakesRequest,
+  ListStakesResponse,
+} from '../gen/coinbase/staking/rewards/v1/stake.pb';
 
-import { EthereumKiln } from "./protocols/ethereum_kiln_staking";
+import { Ethereum } from './protocols/ethereum-kiln-staking';
+import { Solana } from './protocols/solana-staking';
 
-const DEFAULT_URL = "https://api.developer.coinbase.com/staking";
+const DEFAULT_URL = 'https://api.developer.coinbase.com/staking';
 
-export class StakingServiceClient {
+export class StakingClient {
   readonly baseURL: string;
-  readonly EthereumKiln: EthereumKiln;
+  readonly Ethereum: Ethereum;
+  readonly Solana: Solana;
 
   constructor(baseURL?: string) {
     if (baseURL) {
@@ -46,16 +56,18 @@ export class StakingServiceClient {
       this.baseURL = DEFAULT_URL;
     }
 
-    this.EthereumKiln = new EthereumKiln(this);
+    this.Ethereum = new Ethereum(this);
+    this.Solana = new Solana(this);
   }
 
   // List protocols supported by Staking API
   async listProtocols(): Promise<ListProtocolsResponse> {
-    const path: string = "/api/v1alpha1/protocols";
-    const method: string = "GET";
+    const path: string = '/v1/protocols';
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: ListProtocolsRequest = {};
 
@@ -65,11 +77,12 @@ export class StakingServiceClient {
   // List networks supported by Staking API for a given protocol.
   async listNetworks(protocol: string): Promise<ListNetworksResponse> {
     const parent: string = `protocols/${protocol}`;
-    const path: string = `/api/v1alpha1/${parent}/networks`;
-    const method: string = "GET";
+    const path: string = `/v1/${parent}/networks`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: ListNetworksRequest = {
       parent: parent,
@@ -84,11 +97,12 @@ export class StakingServiceClient {
     network: string,
   ): Promise<ListActionsResponse> {
     const parent: string = `protocols/${protocol}/networks/${network}`;
-    const path: string = `/api/v1alpha1/${parent}/actions`;
-    const method: string = "GET";
+    const path: string = `/v1/${parent}/actions`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: ListActionsRequest = {
       parent: parent,
@@ -98,32 +112,34 @@ export class StakingServiceClient {
   }
 
   // Returns point-in-time context of staking data for an address. This function takes the entire req object as input.
-  // Use the protocol-specific helper functions like EthereumKiln.ViewStakingContext to view protocol and network
+  // Use the protocol-specific helper functions like Ethereum.ViewStakingContext to view protocol and network
   // specific staking context.
   async viewStakingContext(
     req: ViewStakingContextRequest,
   ): Promise<ViewStakingContextResponse> {
-    const path: string = "/api/v1alpha1/viewStakingContext:view";
-    const method: string = "GET";
+    const path: string = '/v1/viewStakingContext:view';
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     return StakingService.ViewStakingContext(req, initReq);
   }
 
   // Create a workflow under a given project. This function takes the entire req object as input.
-  // Use the protocol-specific helper functions like EthereumKiln.Stake to create a protocol and action specific workflow.
+  // Use the protocol-specific helper functions like Ethereum.Stake to create a protocol and action specific workflow.
   async createWorkflow(
     projectId: string,
     req: CreateWorkflowRequest,
   ): Promise<Workflow> {
     const parent: string = `projects/${projectId}`;
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
-    const method: string = "POST";
+    const path: string = `/v1/${parent}/workflows`;
+    const method: string = 'POST';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     return StakingService.CreateWorkflow(req, initReq);
   }
@@ -132,11 +148,12 @@ export class StakingServiceClient {
   async getWorkflow(projectId: string, workflowId: string): Promise<Workflow> {
     const parent: string = `projects/${projectId}`;
     const name: string = `${parent}/workflows/${workflowId}`;
-    const path: string = `/api/v1alpha1/${name}`;
-    const method: string = "GET";
+    const path: string = `/v1/${name}`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: GetWorkflowRequest = {
       name: name,
@@ -154,11 +171,12 @@ export class StakingServiceClient {
   ): Promise<Workflow> {
     const parent: string = `projects/${projectId}`;
     const name: string = `${parent}/workflows/${workflowId}`;
-    const path: string = `/api/v1alpha1/${name}/step`;
-    const method: string = "POST";
+    const path: string = `/v1/${name}/step`;
+    const method: string = 'POST';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: PerformWorkflowStepRequest = {
       name: name,
@@ -169,40 +187,19 @@ export class StakingServiceClient {
     return StakingService.PerformWorkflowStep(req, initReq);
   }
 
-  // Refresh a workflow step given its workflow name and step number.
-  async refreshWorkflowStep(
-    projectId: string,
-    workflowId: string,
-    stepIndex: number,
-  ): Promise<Workflow> {
-    const parent: string = `projects/${projectId}`;
-    const name: string = `${parent}/workflows/${workflowId}`;
-    const path: string = `/api/v1alpha1/${name}/refresh`;
-    const method: string = "POST";
-
-    // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
-
-    const req: RefreshWorkflowStepRequest = {
-      name: name,
-      step: stepIndex,
-    };
-
-    return StakingService.RefreshWorkflowStep(req, initReq);
-  }
-
   // List workflows for a given project.
   async listWorkflows(
     project: string,
     pageSize: number = 100,
-    filter: string = "",
+    filter: string = '',
   ): Promise<ListWorkflowsResponse> {
     const parent: string = `projects/${project}`;
-    const path: string = `/api/v1alpha1/${parent}/workflows`;
-    const method: string = "GET";
+    const path: string = `/v1/${parent}/workflows`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(this.baseURL, path, method);
+    const initReq = await getAuthDetails(url, path, method);
 
     const req: ListWorkflowsRequest = {
       parent: parent,
@@ -212,14 +209,44 @@ export class StakingServiceClient {
 
     return StakingService.ListWorkflows(req, initReq);
   }
+
+  // List onchain rewards of an address for a specific protocol, with optional filters for time range, aggregation period, and more.
+  async listRewards(
+    protocol: string,
+    req: ListRewardsRequest,
+  ): Promise<ListRewardsResponse> {
+    const parent: string = `protocols/${protocol}`;
+    const path: string = `/v1/${parent}/rewards`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/rewards';
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(url, path, method);
+
+    return RewardService.ListRewards(req, initReq);
+  }
+
+  // List staking activities for a given protocol.
+  async listStakes(
+    protocol: string,
+    req: ListStakesRequest,
+  ): Promise<ListStakesResponse> {
+    const parent: string = `protocols/${protocol}`;
+    const path: string = `/v1/${parent}/stakes`;
+    const method: string = 'GET';
+    const url: string = this.baseURL + '/rewards';
+
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(url, path, method);
+
+    return RewardService.ListStakes(req, initReq);
+  }
 }
 
 export function workflowHasFinished(workflow: Workflow): boolean {
   return (
     workflow.state === WorkflowState.STATE_COMPLETED ||
-    workflow.state === WorkflowState.STATE_FAILED ||
-    workflow.state === WorkflowState.STATE_CANCELED ||
-    workflow.state === WorkflowState.STATE_CANCEL_FAILED
+    workflow.state === WorkflowState.STATE_FAILED
   );
 }
 
@@ -233,28 +260,28 @@ export function workflowWaitingForExternalBroadcast(
   return workflow.state === WorkflowState.STATE_WAITING_FOR_EXT_BROADCAST;
 }
 
-export function workflowFailedRefreshable(workflow: Workflow): boolean {
-  return workflow.state === WorkflowState.STATE_FAILED_REFRESHABLE;
-}
-
-export function isTxStepOutput(step: WorkflowStep): step is WorkflowStep & { txStepOutput: TxStepOutput } {
+export function isTxStepOutput(
+  step: WorkflowStep,
+): step is WorkflowStep & { txStepOutput: TxStepOutput } {
   return (step as WorkflowStep).txStepOutput !== undefined;
 }
 
-export function isWaitStepOutput(step: WorkflowStep): step is WorkflowStep & { waitStepOutput: WaitStepOutput } {
+export function isWaitStepOutput(
+  step: WorkflowStep,
+): step is WorkflowStep & { waitStepOutput: WaitStepOutput } {
   return (step as WorkflowStep).waitStepOutput !== undefined;
 }
 
 async function getAuthDetails(
-  baseURL: string,
+  url: string,
   path: string,
   method: string,
 ): Promise<fm.InitReq> {
   // Generate the JWT token
-  const token = await buildJWT(baseURL + path, method);
+  const token = await buildJWT(url + path, method);
 
   return {
-    pathPrefix: baseURL,
+    pathPrefix: url,
     headers: {
       Authorization: `Bearer ${token}`,
     },

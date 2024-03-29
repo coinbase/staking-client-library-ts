@@ -1,0 +1,90 @@
+{
+	"env": {
+		"es6": true,
+		"node": true
+	},
+	"extends": [
+		"prettier",
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended",
+		// NOTE: This needs to be last, per documentation:
+		// https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-legacy-eslintrc
+		"plugin:prettier/recommended"
+	],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2018,
+		"sourceType": "module"
+	},
+	"plugins": [
+		"@typescript-eslint",
+		"filename-rules",
+		"prettier"
+	],
+	"rules": {
+		"filename-rules/match": [
+			2,
+			"kebab-case"
+		],
+		"no-unused-vars": "warn",
+		"no-constant-condition": "warn",
+		"no-empty": "warn",
+		"consistent-return": "error",
+		"@typescript-eslint/no-empty-function": "warn",
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": true
+			},
+			{
+				"trailingComma": "none"
+			}
+		],
+		"prefer-const": "off",
+		// NOTE: We can't enable TS compilation to enforce function return types
+		// Source: https://github.com/Microsoft/TypeScript/issues/18529
+		// So instead we enforce it with linting
+		"@typescript-eslint/explicit-function-return-type": "error",
+		"object-curly-spacing": [
+			"error",
+			"always"
+		],
+		"padding-line-between-statements": [
+			"error",
+			{
+				"blankLine": "always",
+				"prev": [
+					"const",
+					"let",
+					"var"
+				],
+				"next": "*"
+			},
+			{
+				"blankLine": "any",
+				"prev": [
+					"const",
+					"let",
+					"var"
+				],
+				"next": [
+					"const",
+					"let",
+					"var"
+				]
+			}
+		],
+		"lines-between-class-members": [
+			"error",
+			"always",
+			{
+				"exceptAfterSingleLine": true
+			}
+		]
+	}
+}

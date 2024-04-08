@@ -1,4 +1,5 @@
 import { EthereumTransactionSigner } from './ethereum-signer';
+import { SolanaTransactionSigner } from './solana-signer';
 
 export interface TxSigner {
   // eslint-disable-next-line no-unused-vars
@@ -10,6 +11,8 @@ export class TxSignerFactory {
     switch (protocol) {
       case 'ethereum':
         return new EthereumTransactionSigner();
+      case 'solana':
+        return new SolanaTransactionSigner();
       // other cases for additional protocols
       default:
         throw new Error('Unsupported protocol');

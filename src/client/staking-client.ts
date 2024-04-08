@@ -41,6 +41,7 @@ import {
 
 import { Ethereum } from './protocols/ethereum-kiln-staking';
 import { Solana } from './protocols/solana-staking';
+import { Cosmos } from './protocols/cosmos-staking';
 
 const DEFAULT_URL = 'https://api.developer.coinbase.com/staking';
 
@@ -48,6 +49,7 @@ export class StakingClient {
   readonly baseURL: string;
   readonly Ethereum: Ethereum;
   readonly Solana: Solana;
+  readonly Cosmos: Cosmos;
 
   constructor(baseURL?: string) {
     if (baseURL) {
@@ -58,6 +60,7 @@ export class StakingClient {
 
     this.Ethereum = new Ethereum(this);
     this.Solana = new Solana(this);
+    this.Cosmos = new Cosmos(this);
   }
 
   // List protocols supported by Staking API

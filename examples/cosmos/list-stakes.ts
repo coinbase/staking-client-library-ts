@@ -1,8 +1,7 @@
 import { StakingClient } from '../../src/client/staking-client';
 
 // TODO: Replace address as per your requirement.
-const address: string =
-  '0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474';
+const address: string = 'cosmosvaloper1c4k24jzduc365kywrsvf5ujz4ya6mwympnc4en';
 
 const client = new StakingClient();
 
@@ -14,8 +13,8 @@ async function listStakes(): Promise<void> {
   const filter: string = `address='${address}'`;
 
   try {
-    // List ethereum staking balances
-    let resp = await client.Ethereum.listStakes(filter);
+    // List cosmos staking balances
+    let resp = await client.Cosmos.listStakes(filter);
 
     let count = 0;
 
@@ -34,5 +33,5 @@ async function listStakes(): Promise<void> {
 }
 
 listStakes().catch((error) => {
-  console.error('Error listing ethereum staking balances: ', error.message);
+  console.error('Error listing cosmos staking balances: ', error.message);
 });

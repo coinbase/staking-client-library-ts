@@ -2,7 +2,6 @@ import { TxSignerFactory } from '../../src/signers';
 import {
   StakingClient,
   workflowHasFinished,
-  workflowWaitingForSigning,
   workflowWaitingForExternalBroadcast,
   isTxStepOutput,
   isWaitStepOutput,
@@ -38,7 +37,6 @@ async function stakePartialEth(): Promise<void> {
     workflow = await client.Ethereum.stake(
       projectId,
       network,
-      false,
       stakerAddress,
       integrationAddress,
       amount,
@@ -80,7 +78,7 @@ async function stakePartialEth(): Promise<void> {
 
     await printWorkflowProgressDetails(workflow);
 
-    if (workflowWaitingForSigning(workflow)) {
+    if (workflowWaitingForExternalBroadcast(workflow)) {
       unsignedTx =
         workflow.steps![currentStepId].txStepOutput?.unsignedTx || '';
       if (unsignedTx === '') {
@@ -92,18 +90,9 @@ async function stakePartialEth(): Promise<void> {
       console.log('Signing unsigned tx %s ...', unsignedTx);
       const signedTx = await signer.signTransaction(privateKey, unsignedTx);
 
-      console.log('Returning back signed tx %s ...', signedTx);
-
-      workflow = await client.performWorkflowStep(
-        projectId,
-        workflowId,
-        currentStepId,
-        signedTx,
-      );
-    } else if (workflowWaitingForExternalBroadcast(workflow)) {
       console.log(
-        'Please sign and broadcast this unsigned tx %s externally and return back the tx hash via the PerformWorkflowStep API ...',
-        unsignedTx,
+        'Please broadcast this signed tx %s externally and return back the tx hash via the PerformWorkflowStep API ...',
+        signedTx,
       );
       break;
     } else if (workflowHasFinished(workflow)) {

@@ -253,10 +253,6 @@ export function workflowHasFinished(workflow: Workflow): boolean {
   );
 }
 
-export function workflowWaitingForSigning(workflow: Workflow): boolean {
-  return workflow.state === WorkflowState.STATE_WAITING_FOR_SIGNING;
-}
-
 export function workflowWaitingForExternalBroadcast(
   workflow: Workflow,
 ): boolean {

@@ -23,7 +23,6 @@ async function stakePartialEth(): Promise<void> {
     workflow = await client.Ethereum.stake(
       projectId,
       network,
-      true,
       stakerAddress,
       integrationAddress,
       amount,

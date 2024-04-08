@@ -26,7 +26,6 @@ export class Ethereum {
   async stake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     stakerAddress: string,
     integratorContractAddress: string,
     amount: string,
@@ -35,7 +34,6 @@ export class Ethereum {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/stake`,
-        skipBroadcast: skipBroadcast,
         ethereumKilnStakingParameters: {
           stakeParameters: {
             stakerAddress: stakerAddress,
@@ -55,7 +53,6 @@ export class Ethereum {
   async unstake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     stakerAddress: string,
     integratorContractAddress: string,
     amount: string,
@@ -64,7 +61,6 @@ export class Ethereum {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/unstake`,
-        skipBroadcast: skipBroadcast,
         ethereumKilnStakingParameters: {
           unstakeParameters: {
             stakerAddress: stakerAddress,
@@ -84,7 +80,6 @@ export class Ethereum {
   async claimStake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     stakerAddress: string,
     integratorContractAddress: string,
   ): Promise<Workflow> {
@@ -92,7 +87,6 @@ export class Ethereum {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/claim_stake`,
-        skipBroadcast: skipBroadcast,
         ethereumKilnStakingParameters: {
           claimStakeParameters: {
             stakerAddress: stakerAddress,

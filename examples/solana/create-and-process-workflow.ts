@@ -2,7 +2,6 @@ import { TxSignerFactory } from '../../src/signers';
 import {
   StakingClient,
   workflowHasFinished,
-  workflowWaitingForSigning,
   workflowWaitingForExternalBroadcast,
   isTxStepOutput,
   isWaitStepOutput,
@@ -38,7 +37,6 @@ async function stakeSolana(): Promise<void> {
     workflow = await client.Solana.stake(
       projectId,
       network,
-      true,
       walletAddress,
       validatorAddress,
       amount,
@@ -83,7 +81,7 @@ async function stakeSolana(): Promise<void> {
 
     await printWorkflowProgressDetails(workflow);
 
-    if (workflowWaitingForSigning(workflow)) {
+    if (workflowWaitingForExternalBroadcast(workflow)) {
       unsignedTx =
         workflow.steps![currentStepId].txStepOutput?.unsignedTx || '';
       if (unsignedTx === '') {
@@ -93,27 +91,6 @@ async function stakeSolana(): Promise<void> {
       }
 
       console.log('Signing unsigned tx %s ...', unsignedTx);
-      const signedTx = await signer.signTransaction(privateKey, unsignedTx);
-
-      console.log('Returning back signed tx %s ...', signedTx);
-
-      workflow = await client.performWorkflowStep(
-        projectId,
-        workflowId,
-        currentStepId,
-        signedTx,
-      );
-    } else if (workflowWaitingForExternalBroadcast(workflow)) {
-      unsignedTx =
-        workflow.steps![currentStepId].txStepOutput?.unsignedTx || '';
-      if (unsignedTx === '') {
-        console.log('Waiting for unsigned tx to be available ...');
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // sleep for 1 second
-        continue;
-      }
-
-      console.log('Signing unsigned tx %s ...', unsignedTx);
-
       const signedTx = await signer.signTransaction(privateKey, unsignedTx);
 
       console.log(

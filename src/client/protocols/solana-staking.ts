@@ -26,7 +26,6 @@ export class Solana {
   async stake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     walletAddress: string,
     validatorAddress: string,
     amount: string,
@@ -35,7 +34,6 @@ export class Solana {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/stake`,
-        skipBroadcast: skipBroadcast,
         solanaStakingParameters: {
           stakeParameters: {
             walletAddress: walletAddress,
@@ -55,7 +53,6 @@ export class Solana {
   async unstake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     walletAddress: string,
     stakeAccountAddress: string,
     amount: string,
@@ -64,7 +61,6 @@ export class Solana {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/unstake`,
-        skipBroadcast: skipBroadcast,
         solanaStakingParameters: {
           unstakeParameters: {
             walletAddress: walletAddress,
@@ -84,7 +80,6 @@ export class Solana {
   async claimStake(
     projectId: string,
     network: string,
-    skipBroadcast: boolean = false,
     walletAddress: string,
     stakeAccountAddress: string,
   ): Promise<Workflow> {
@@ -92,7 +87,6 @@ export class Solana {
       parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/claim_stake`,
-        skipBroadcast: skipBroadcast,
         solanaStakingParameters: {
           claimStakeParameters: {
             walletAddress: walletAddress,

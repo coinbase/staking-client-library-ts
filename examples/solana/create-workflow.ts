@@ -23,7 +23,6 @@ async function stakeSolana(): Promise<void> {
     workflow = await client.Solana.stake(
       projectId,
       network,
-      true,
       walletAddress,
       validatorAddress,
       amount,

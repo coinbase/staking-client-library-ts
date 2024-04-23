@@ -189,6 +189,160 @@
         ]
       }
     },
+    "/v1/workflows": {
+      "get": {
+        "summary": "List supported workflows",
+        "operationId": "listWorkflows",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1ListWorkflowsResponse"
+            }
+          },
+          "400": {
+            "description": "The request attempted has invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "401": {
+            "description": "Returned if authentication information is invalid",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "403": {
+            "description": "Returned when a user does not have permission to the resource.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "404": {
+            "description": "Returned when a resource is not found.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "429": {
+            "description": "Returned when a resource limit has been reached.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "500": {
+            "description": "Returned when an internal server error happens.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "description": "[AIP-160](https://google.aip.dev/160) filter\nSupported fields:\n- string action: \"stake\", \"unstake\"\n- string protocol: \"ethereum_kiln\"\n- string network: \"holesky\", \"mainnet\"",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of workflows to return. The service may\nreturn fewer than this value.\n\nIf unspecified, 100 workflows will be returned.\nThe maximum value is 1000; values over 1000 will be floored to 1000.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A page token as part of the response of a previous call.\nProvide this to retrieve the next page.\n\nWhen paginating, all other parameters must match the previous\nrequest to list resources.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Workflow"
+        ]
+      },
+      "post": {
+        "summary": "Create workflow",
+        "operationId": "createWorkflow",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1Workflow"
+            }
+          },
+          "400": {
+            "description": "The request attempted has invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "401": {
+            "description": "Returned if authentication information is invalid",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "403": {
+            "description": "Returned when a user does not have permission to the resource.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "404": {
+            "description": "Returned when a resource is not found.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "429": {
+            "description": "Returned when a resource limit has been reached.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "500": {
+            "description": "Returned when an internal server error happens.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "workflow",
+            "description": "The workflow to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Workflow",
+              "required": [
+                "workflow"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "Workflow"
+        ]
+      }
+    },
     "/v1/{name}": {
       "get": {
         "summary": "Get workflow",
@@ -246,11 +400,11 @@
         "parameters": [
           {
             "name": "name",
-            "description": "The resource name of the workflow.\nFormat: projects/{project}/workflows/{workflow}",
+            "description": "The resource name of the workflow.\nFormat: workflows/{workflow}",
             "in": "path",
             "required": true,
             "type": "string",
-            "pattern": "projects/[^/]+/workflows/[^/]+"
+            "pattern": "workflows/[^/]+"
           }
         ],
         "tags": [
@@ -316,11 +470,11 @@
         "parameters": [
           {
             "name": "name",
-            "description": "The resource name of the workflow.\nFormat: projects/{project}/workflows/{workflow}",
+            "description": "The resource name of the workflow.\nFormat: workflows/{workflow}",
             "in": "path",
             "required": true,
             "type": "string",
-            "pattern": "projects/[^/]+/workflows/[^/]+"
+            "pattern": "workflows/[^/]+"
           },
           {
             "name": "body",
@@ -558,176 +712,6 @@
         ],
         "tags": [
           "StakingTarget"
-        ]
-      }
-    },
-    "/v1/{parent}/workflows": {
-      "get": {
-        "summary": "List supported workflows",
-        "operationId": "listWorkflows",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1ListWorkflowsResponse"
-            }
-          },
-          "400": {
-            "description": "The request attempted has invalid parameters",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "401": {
-            "description": "Returned if authentication information is invalid",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "403": {
-            "description": "Returned when a user does not have permission to the resource.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "404": {
-            "description": "Returned when a resource is not found.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "429": {
-            "description": "Returned when a resource limit has been reached.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "500": {
-            "description": "Returned when an internal server error happens.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "description": "The resource name of the parent that owns\nthe collection of networks.\nFormat: projects/{project}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          },
-          {
-            "name": "filter",
-            "description": "[AIP-160](https://google.aip.dev/160) filter\nSupported fields:\n- string action: \"stake\", \"unstake\"\n- string protocol: \"ethereum_kiln\"\n- string network: \"holesky\", \"mainnet\"",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "pageSize",
-            "description": "The maximum number of workflows to return. The service may\nreturn fewer than this value.\n\nIf unspecified, 100 workflows will be returned.\nThe maximum value is 1000; values over 1000 will be floored to 1000.",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageToken",
-            "description": "A page token as part of the response of a previous call.\nProvide this to retrieve the next page.\n\nWhen paginating, all other parameters must match the previous\nrequest to list resources.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Workflow"
-        ]
-      },
-      "post": {
-        "summary": "Create workflow",
-        "operationId": "createWorkflow",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1Workflow"
-            }
-          },
-          "400": {
-            "description": "The request attempted has invalid parameters",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "401": {
-            "description": "Returned if authentication information is invalid",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "403": {
-            "description": "Returned when a user does not have permission to the resource.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "404": {
-            "description": "Returned when a resource is not found.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "429": {
-            "description": "Returned when a resource limit has been reached.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "500": {
-            "description": "Returned when an internal server error happens.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "description": "The resource name of the parent that owns\nthe workflow.\nFormat: projects/{project}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          },
-          {
-            "name": "workflow",
-            "description": "The workflow to create.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1Workflow",
-              "required": [
-                "workflow"
-              ]
-            }
-          }
-        ],
-        "tags": [
-          "Workflow"
         ]
       }
     }
@@ -970,6 +954,39 @@
         "amount"
       ]
     },
+    "v1EthereumNativeStakeParameters": {
+      "type": "object",
+      "properties": {
+        "withdrawalAddress": {
+          "type": "string",
+          "title": "Ethereum address used to withdrawal funds"
+        },
+        "feeRecipient": {
+          "type": "string",
+          "title": "Ethereum address used to accumulate fees"
+        },
+        "amount": {
+          "$ref": "#/definitions/v1Amount",
+          "title": "Amount of ETH to stake in increments of 32"
+        }
+      },
+      "title": "Ethereum: Native Stake Parameters",
+      "required": [
+        "withdrawalAddress",
+        "feeRecipient",
+        "amount"
+      ]
+    },
+    "v1EthereumStakingParameters": {
+      "type": "object",
+      "properties": {
+        "nativeStakeParameters": {
+          "$ref": "#/definitions/v1EthereumNativeStakeParameters",
+          "title": "Native staking parameters"
+        }
+      },
+      "title": "Ethereum: Staking Parameters"
+    },
     "v1ListActionsResponse": {
       "type": "object",
       "properties": {
@@ -1083,6 +1100,28 @@
         }
       },
       "description": "A Protocol resource (e.g. ethereum_kiln, solana etc.)."
+    },
+    "v1ProvisionInfraStepOutput": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/v1ProvisionInfraStepOutputState",
+          "description": "The state of the provision infra step.",
+          "readOnly": true
+        }
+      },
+      "description": "The details for an infrastructure provision request."
+    },
+    "v1ProvisionInfraStepOutputState": {
+      "type": "string",
+      "enum": [
+        "STATE_UNSPECIFIED",
+        "STATE_IN_PROGRESS",
+        "STATE_COMPLETED",
+        "STATE_FAILED"
+      ],
+      "default": "STATE_UNSPECIFIED",
+      "description": "State defines an enumeration of states for provisioning infra.\n\n - STATE_UNSPECIFIED: Unspecified step state.\n - STATE_IN_PROGRESS: Provision step is in-progress.\n - STATE_COMPLETED: Provision step completed.\n - STATE_FAILED: Provision step failed."
     },
     "v1SolanaClaimStakeParameters": {
       "type": "object",
@@ -1387,7 +1426,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "title": "The resource name of the workflow.\nFormat: projects/{projectUUID}/workflows/{workflowUUID}\nEx: projects/ 123e4567-e89b-12d3-a456-426614174000/workflows/123e4567-e89b-12d3-a456-426614174000",
+          "title": "The resource name of the workflow.\nFormat: workflows/{workflowUUID}\nEx: workflows/123e4567-e89b-12d3-a456-426614174000",
           "readOnly": true
         },
         "action": {
@@ -1401,6 +1440,10 @@
         "ethereumKilnStakingParameters": {
           "$ref": "#/definitions/v1EthereumKilnStakingParameters",
           "description": "EthereumKiln staking parameters."
+        },
+        "ethereumStakingParameters": {
+          "$ref": "#/definitions/v1EthereumStakingParameters",
+          "description": "Ethereum staking parameters."
         },
         "state": {
           "$ref": "#/definitions/v1WorkflowState",
@@ -1445,7 +1488,8 @@
       "required": [
         "action",
         "solanaStakingParameters",
-        "ethereumKilnStakingParameters"
+        "ethereumKilnStakingParameters",
+        "ethereumStakingParameters"
       ]
     },
     "v1WorkflowState": {
@@ -1477,6 +1521,11 @@
         "waitStepOutput": {
           "$ref": "#/definitions/v1WaitStepOutput",
           "description": "The waiting details for any kind like how many checkpoints away for unbonding etc.",
+          "readOnly": true
+        },
+        "provisionInfraStepOutput": {
+          "$ref": "#/definitions/v1ProvisionInfraStepOutput",
+          "description": "The details for provisioned infrastructure.",
           "readOnly": true
         }
       },

@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "clean": "rimraf ./dist",
+    "gen": "./scripts/generate-client.sh",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
     "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*'",

@@ -25,16 +25,16 @@ export class StakingService {
     return fm.fetchReq<CoinbaseStakingOrchestrationV1Action.ListActionsRequest, CoinbaseStakingOrchestrationV1Action.ListActionsResponse>(`/v1/${req["parent"]}/actions?${fm.renderURLSearchParams(req, ["parent"])}`, {...initReq, method: "GET"})
   }
   static CreateWorkflow(req: CoinbaseStakingOrchestrationV1Workflow.CreateWorkflowRequest, initReq?: fm.InitReq): Promise<CoinbaseStakingOrchestrationV1Workflow.Workflow> {
-    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.CreateWorkflowRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/${req["parent"]}/workflows`, {...initReq, method: "POST", body: JSON.stringify(req["workflow"], fm.replacer)})
+    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.CreateWorkflowRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/workflows`, {...initReq, method: "POST", body: JSON.stringify(req["workflow"], fm.replacer)})
   }
   static GetWorkflow(req: CoinbaseStakingOrchestrationV1Workflow.GetWorkflowRequest, initReq?: fm.InitReq): Promise<CoinbaseStakingOrchestrationV1Workflow.Workflow> {
-    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.GetWorkflowRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/${req["name"]}?${fm.renderURLSearchParams(req, ["name"])}`, {...initReq, method: "GET"})
+    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.GetWorkflowRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/${req["nameworkflows"]}?${fm.renderURLSearchParams(req, ["nameworkflows"])}`, {...initReq, method: "GET"})
   }
   static ListWorkflows(req: CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsRequest, initReq?: fm.InitReq): Promise<CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsResponse> {
-    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsRequest, CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsResponse>(`/v1/${req["parent"]}/workflows?${fm.renderURLSearchParams(req, ["parent"])}`, {...initReq, method: "GET"})
+    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsRequest, CoinbaseStakingOrchestrationV1Workflow.ListWorkflowsResponse>(`/v1/workflows?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static PerformWorkflowStep(req: CoinbaseStakingOrchestrationV1Workflow.PerformWorkflowStepRequest, initReq?: fm.InitReq): Promise<CoinbaseStakingOrchestrationV1Workflow.Workflow> {
-    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.PerformWorkflowStepRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/${req["name"]}/step`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+    return fm.fetchReq<CoinbaseStakingOrchestrationV1Workflow.PerformWorkflowStepRequest, CoinbaseStakingOrchestrationV1Workflow.Workflow>(`/v1/${req["nameworkflows"]}/step`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static ViewStakingContext(req: CoinbaseStakingOrchestrationV1Staking_context.ViewStakingContextRequest, initReq?: fm.InitReq): Promise<CoinbaseStakingOrchestrationV1Staking_context.ViewStakingContextResponse> {
     return fm.fetchReq<CoinbaseStakingOrchestrationV1Staking_context.ViewStakingContextRequest, CoinbaseStakingOrchestrationV1Staking_context.ViewStakingContextResponse>(`/v1/viewStakingContext:view?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})

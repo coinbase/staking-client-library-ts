@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Coinbase Rewards API",
-    "description": "API that delivers crypto-forward onchain staking-related rewards data",
+    "title": "Rewards Service",
+    "description": "Service that provides access to onchain, staking-related rewards data.",
     "version": "v1"
   },
   "tags": [
@@ -30,66 +30,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/{name}": {
-      "get": {
-        "summary": "Returns a staking balance",
-        "description": "Returns a specific staking balance for an address on the specific protocol at a particular point in time.",
-        "operationId": "RewardService_GetStake",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1Stake"
-            }
-          },
-          "400": {
-            "description": "The request attempted has invalid parameters",
-            "schema": {
-              "example": {
-                "code": 3,
-                "message": "Invalid stake ID. \u003cRemediation assistance here\u003e.",
-                "details": []
-              }
-            }
-          },
-          "401": {
-            "description": "Returned if authentication information is invalid",
-            "schema": {
-              "example": "Unauthorized"
-            }
-          },
-          "500": {
-            "description": "Returned when an internal server error happens.",
-            "schema": {
-              "example": {
-                "code": 3,
-                "message": "Internal server error.",
-                "details": []
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "description": "The resource name of the stake to retrieve.\nFormat: protocols/{protocol}/stakes/{stake}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "protocols/[^/]+/stakes/[^/]+"
-          }
-        ],
-        "tags": [
-          "Stake"
-        ]
-      }
-    },
     "/v1/{parent}/rewards": {
       "get": {
         "summary": "List and filter rewards",
@@ -197,7 +137,7 @@
           },
           {
             "name": "filter",
-            "description": "[AIP-160](https://google.aip.dev/160) format compliant filter. Supported protocols are 'ethereum', 'solana', and 'cosmos'.\nSupplying other protocols will return an error.\n* **Ethereum**:\n  - Fields:\n  - `address` - A ethereum validator public key.\n  - `epoch` - An ethereum epoch. Supports epoch comparisons (ex: `epoch \u003e= 1000 AND epoch \u003c= 2000`).\n  - Example(s):\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474' AND epoch \u003e= 234640 AND epoch \u003c 234645\"`\n\n* **Solana**:\n  - Fields:\n  - `address` - A solana validator or delegator address.\n  - `epoch` - A solana epoch. Supports epoch comparisons (ex: `epoch \u003e= 1000 AND epoch \u003c= 2000`).\n  - Example(s):\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar' AND epoch \u003e= 440 AND epoch \u003c 450\"`\n\n* **Cosmos**:\n  - Fields:\n  - `address` - A cosmos validator or delegator address (ex: `cosmosvaloper1c4k24jzduc365kywrsvf5ujz4ya6mwympnc4en` and `cosmos1c4k24jzduc365kywrsvf5ujz4ya6mwymy8vq4q`)\n  - `date` - A date in format 'YYYY-MM-DD'. Supports multiple comparisons (ex: `date \u003e= '2023-07-01' AND date \u003c= '2023-07-31'`).\n  - Example(s):\n  - `address='cosmos1mfduj0qax6ut8rd6cfc4j0ds06z0mwlhrljhqh' AND date = '2023-10-16'`",
+            "description": "[AIP-160](https://google.aip.dev/160) format compliant filter. Supported protocols are 'ethereum', 'solana', and 'cosmos'.\nSupplying other protocols will return an error.\n* **Ethereum**:\n  - Fields:\n  - `address` - A ethereum validator public key.\n  - `date` - A date in format 'YYYY-MM-DD'. Supports multiple comparisons (ex: '2024-01-15).\n  - `period_end_time` - A timestamp in RFC-3339 format. Supports multiple comparisons (ex: '2024-01-01T00:00:00Z' and '2024-01-15T00:00:00Z').\n  - Example(s):\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474' AND date \u003e= '2024-01-01' AND date \u003c '2024-01-15'\"`\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474' AND period_end_time \u003e= '2024-01-01T00:00:00Z' AND period_end_time \u003c '2024-01-15T00:00:00Z'\"`\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474' AND date = '2024-01-01'\"`\n\n* **Solana**:\n  - Fields:\n  - `address` - A solana validator or delegator address.\n  - `epoch` - A solana epoch. Supports epoch comparisons (ex: `epoch \u003e= 1000 AND epoch \u003c= 2000`).\n  - `period_end_time` - A timestamp in RFC-3339 format. Supports multiple comparisons (ex: '2024-01-01T00:00:00Z' and '2024-01-15T00:00:00Z').\n  - Example(s):\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar' AND epoch \u003e= 540 AND epoch \u003c 550\"`\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar' AND period_end_time \u003e= '2024-01-01T00:00:00Z' AND period_end_time \u003c '2024-01-15T00:00:00Z'\"`\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar' AND epoch = 550\"`\n\n* **Cosmos**:\n  - Fields:\n  - `address` - A cosmos validator or delegator address (ex: `cosmosvaloper1c4k24jzduc365kywrsvf5ujz4ya6mwympnc4en` and `cosmos1c4k24jzduc365kywrsvf5ujz4ya6mwymy8vq4q`)\n  - `date` - A date in format 'YYYY-MM-DD'. Supports multiple comparisons (ex: '2024-01-15).\n  - `period_end_time` - A timestamp in RFC-3339 format. Supports multiple comparisons (ex: '2024-01-01T00:00:00Z' and '2024-01-15T00:00:00Z').\n  - Example(s):\n  - `\"address='cosmos1mfduj0qax6ut8rd6cfc4j0ds06z0mwlhrljhqh' AND date = '2024-11-16'\"`\n  - `\"address='cosmos1mfduj0qax6ut8rd6cfc4j0ds06z0mwlhrljhqh' AND period_end_time \u003e= '2024-01-01T00:00:00Z' AND period_end_time \u003c '2024-01-15T00:00:00Z'\"`\n  - `\"address='cosmos1mfduj0qax6ut8rd6cfc4j0ds06z0mwlhrljhqh' AND date = '2024-01-01'\"`",
             "in": "query",
             "required": false,
             "type": "string"
@@ -279,7 +219,14 @@
           },
           {
             "name": "filter",
-            "description": "[AIP-160](https://google.aip.dev/160) filter",
+            "description": "[AIP-160](https://google.aip.dev/160) format compliant filter. Supported protocols are 'ethereum', 'solana'.\nSupplying other protocols will return an error.\n* **Ethereum**:\n  - Fields:\n  - `address` - A ethereum validator public key.\n  - `evaluation_time` - A timestamp in RFC-3339 format. Supports multiple comparisons (ex: '2024-01-01T00:00:00Z' and '2024-01-15T00:00:00Z').\n  - Example(s):\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474'\"`\n  - `\"address='0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474' AND evaluation_time \u003e= '2024-01-01T00:00:00Z' AND evaluation_time \u003c '2024-01-15T00:00:00Z'\"`\n\n* **Solana**:\n  - Fields:\n  - `address` - A solana staking address.\n  - `evaluation_time` - A timestamp in RFC-3339 format. Supports multiple comparisons (ex: '2024-01-01T00:00:00Z' and '2024-01-15T00:00:00Z').\n  - Example(s):\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar'\"`\n  - `\"address='beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar' AND evaluation_time \u003e= '2024-01-01T00:00:00Z' AND evaluation_time \u003c '2024-01-15T00:00:00Z'\"`",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "orderBy",
+            "description": "The order in which to sort the results.\n[AIP-132](https://google.aip.dev/132) compliant order_by field.\nThe default behavior, if not supplied, is 'evaluation_time desc'.\nExample(s):\n* 'evaluation_time desc', which returns Stakes starting with the most recent.\n* 'evaluation_time asc', which returns Stakes starting with the oldest available.\n* 'evaluation_time', which returns Stakes starting with the oldest available.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -379,6 +326,7 @@
         },
         "exp": {
           "type": "string",
+          "format": "int64",
           "description": "The number of decimals needed to convert from the raw numeric value to the most\ncommon denomination.",
           "readOnly": true
         },
@@ -472,13 +420,13 @@
         "periodStartTime": {
           "type": "string",
           "format": "date-time",
-          "description": "The starting time of this reward period. Returned when querying by epoch.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z). UTC offsets are not currently supported.\nField currently unavailable. Coming soon.",
+          "description": "The starting time of this reward period. Returned when querying by epoch.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2024-11-13T19:38:36Z).\nField currently unavailable. Coming soon.",
           "readOnly": true
         },
         "periodEndTime": {
           "type": "string",
           "format": "date-time",
-          "description": "The ending time of this reward period. Returned when querying by epoch.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z). UTC offsets are not currently supported.",
+          "description": "The ending time of this reward period. Returned when querying by epoch.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2024-11-13T19:38:36Z).",
           "readOnly": true
         },
         "totalEarnedNativeUnit": {
@@ -519,7 +467,7 @@
         "calculatedTime": {
           "type": "string",
           "format": "date-time",
-          "description": "The time at which this yield calculation was calculated.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z). UTC offsets are not currently supported.",
+          "description": "The time at which this yield calculation was calculated.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z).",
           "readOnly": true
         },
         "calculationMethod": {
@@ -541,7 +489,7 @@
         "evaluationTime": {
           "type": "string",
           "format": "date-time",
-          "description": "The time at which this balance was evaluated.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z). UTC offsets are not currently supported.",
+          "description": "The time at which this balance was evaluated.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z).",
           "readOnly": true
         },
         "bondedStake": {
@@ -602,12 +550,17 @@
         "conversionTime": {
           "type": "string",
           "format": "date-time",
-          "description": "The timestamp at which the USD value was sourced to convert the value into USD.\nThis value is as close to the time the reward was earned as possible.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2023-11-13T19:38:36Z). UTC offsets are not currently supported.",
+          "description": "The timestamp at which the USD value was sourced to convert the value into USD.\nThis value is as close to the time the reward was earned as possible.\nTimestamps are in UTC, conforming to the RFC-3339 spec (e.g. 2024-11-13T19:38:36Z).",
           "readOnly": true
         },
         "amount": {
           "$ref": "#/definitions/v1AssetAmount",
-          "description": "The USD value of the reward at the conversion time..",
+          "description": "The USD value of the reward at the conversion time.",
+          "readOnly": true
+        },
+        "conversionPrice": {
+          "type": "string",
+          "description": "The price of the native unit at the conversion time.",
           "readOnly": true
         }
       },

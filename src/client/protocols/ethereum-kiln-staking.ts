@@ -31,7 +31,6 @@ export class Ethereum {
     amount: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/stake`,
         ethereumKilnStakingParameters: {
@@ -58,7 +57,6 @@ export class Ethereum {
     amount: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/unstake`,
         ethereumKilnStakingParameters: {
@@ -84,7 +82,6 @@ export class Ethereum {
     integratorContractAddress: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/ethereum_kiln/networks/${network}/actions/claim_stake`,
         ethereumKilnStakingParameters: {

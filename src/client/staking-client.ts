@@ -205,7 +205,6 @@ export class StakingClient {
     const initReq = await getAuthDetails(url, path, method);
 
     const req: ListWorkflowsRequest = {
-      parent: parent,
       pageSize: pageSize,
       filter: filter,
     };

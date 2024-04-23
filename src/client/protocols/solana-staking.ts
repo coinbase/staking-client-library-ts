@@ -31,7 +31,6 @@ export class Solana {
     amount: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/stake`,
         solanaStakingParameters: {
@@ -58,7 +57,6 @@ export class Solana {
     amount: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/unstake`,
         solanaStakingParameters: {
@@ -84,7 +82,6 @@ export class Solana {
     stakeAccountAddress: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
-      parent: `projects/${projectId}`,
       workflow: {
         action: `protocols/solana/networks/${network}/actions/claim_stake`,
         solanaStakingParameters: {

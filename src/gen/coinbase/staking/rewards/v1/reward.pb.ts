@@ -47,6 +47,7 @@ export type USDValue = {
   source?: USDValueSource
   conversionTime?: GoogleProtobufTimestamp.Timestamp
   amount?: CoinbaseStakingRewardsV1Common.AssetAmount
+  conversionPrice?: string
 }
 
 export type ListRewardsRequest = {

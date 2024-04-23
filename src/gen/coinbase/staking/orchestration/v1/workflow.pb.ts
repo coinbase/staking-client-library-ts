@@ -5,6 +5,7 @@
 */
 
 import * as GoogleProtobufTimestamp from "../../../../google/protobuf/timestamp.pb"
+import * as CoinbaseStakingOrchestrationV1Ethereum from "./ethereum.pb"
 import * as CoinbaseStakingOrchestrationV1Ethereum_kiln from "./ethereum_kiln.pb"
 import * as CoinbaseStakingOrchestrationV1Solana from "./solana.pb"
 
@@ -46,6 +47,13 @@ export enum WaitStepOutputState {
   STATE_COMPLETED = "STATE_COMPLETED",
 }
 
+export enum ProvisionInfraStepOutputState {
+  STATE_UNSPECIFIED = "STATE_UNSPECIFIED",
+  STATE_IN_PROGRESS = "STATE_IN_PROGRESS",
+  STATE_COMPLETED = "STATE_COMPLETED",
+  STATE_FAILED = "STATE_FAILED",
+}
+
 export enum WorkflowState {
   STATE_UNSPECIFIED = "STATE_UNSPECIFIED",
   STATE_IN_PROGRESS = "STATE_IN_PROGRESS",
@@ -70,13 +78,17 @@ export type WaitStepOutput = {
   state?: WaitStepOutputState
 }
 
+export type ProvisionInfraStepOutput = {
+  state?: ProvisionInfraStepOutputState
+}
+
 
 type BaseWorkflowStep = {
   name?: string
 }
 
 export type WorkflowStep = BaseWorkflowStep
-  & OneOf<{ txStepOutput: TxStepOutput; waitStepOutput: WaitStepOutput }>
+  & OneOf<{ txStepOutput: TxStepOutput; waitStepOutput: WaitStepOutput; provisionInfraStepOutput: ProvisionInfraStepOutput }>
 
 
 type BaseWorkflow = {
@@ -91,10 +103,9 @@ type BaseWorkflow = {
 }
 
 export type Workflow = BaseWorkflow
-  & OneOf<{ solanaStakingParameters: CoinbaseStakingOrchestrationV1Solana.SolanaStakingParameters; ethereumKilnStakingParameters: CoinbaseStakingOrchestrationV1Ethereum_kiln.EthereumKilnStakingParameters }>
+  & OneOf<{ solanaStakingParameters: CoinbaseStakingOrchestrationV1Solana.SolanaStakingParameters; ethereumKilnStakingParameters: CoinbaseStakingOrchestrationV1Ethereum_kiln.EthereumKilnStakingParameters; ethereumStakingParameters: CoinbaseStakingOrchestrationV1Ethereum.EthereumStakingParameters }>
 
 export type CreateWorkflowRequest = {
-  parent?: string
   workflow?: Workflow
 }
 
@@ -103,7 +114,6 @@ export type GetWorkflowRequest = {
 }
 
 export type ListWorkflowsRequest = {
-  parent?: string
   filter?: string
   pageSize?: number
   pageToken?: string

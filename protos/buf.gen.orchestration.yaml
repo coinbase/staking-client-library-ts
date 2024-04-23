@@ -1,0 +1,11 @@
+version: v1
+plugins:
+  - name: grpc-gateway-ts
+    out: ./src/gen/
+    opt:
+      - paths=source_relative
+  - name: openapiv2
+    out: ./docs/openapi
+    opt:
+      - allow_merge=true
+      - merge_file_name=orchestration

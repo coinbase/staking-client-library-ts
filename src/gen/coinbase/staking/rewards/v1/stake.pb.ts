@@ -41,7 +41,6 @@ type BaseStake = {
   address?: string
   evaluationTime?: GoogleProtobufTimestamp.Timestamp
   bondedStake?: CoinbaseStakingRewardsV1Common.AssetAmount
-  totalDelegationReceived?: CoinbaseStakingRewardsV1Common.AssetAmount
   rewardRateCalculations?: RewardRate[]
   participantType?: ParticipantType
   protocol?: string
@@ -49,6 +48,7 @@ type BaseStake = {
 }
 
 export type Stake = BaseStake
+  & OneOf<{ totalDelegationReceived: CoinbaseStakingRewardsV1Common.AssetAmount }>
   & OneOf<{ delegationsReceived: StakeDelegation }>
   & OneOf<{ delegationsGiven: StakeDelegation }>
 
@@ -63,13 +63,10 @@ export type ListStakesRequest = {
   pageSize?: number
   pageToken?: string
   filter?: string
+  orderBy?: string
 }
 
 export type ListStakesResponse = {
   stakes?: Stake[]
   nextPageToken?: string
-}
-
-export type GetStakeRequest = {
-  name?: string
 }

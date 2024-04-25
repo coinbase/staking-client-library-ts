@@ -39,7 +39,7 @@ const client = new StakingClient();
 client.Ethereum.stake(
   'holesky',
   true,
-  'your-wallet-address', // replace with your wallet address
+  '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', // replace with your wallet address
   '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b',
   '123',
 )

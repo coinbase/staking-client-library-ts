@@ -133,7 +133,7 @@ export class StakingClient {
   // Create a workflow under a given project. This function takes the entire req object as input.
   // Use the protocol-specific helper functions like Ethereum.Stake to create a protocol and action specific workflow.
   async createWorkflow(req: CreateWorkflowRequest): Promise<Workflow> {
-    const path: string = `/v1/${parent}/workflows`;
+    const path: string = `/v1/workflows`;
     const method: string = 'POST';
     const url: string = this.baseURL + '/orchestration';
 
@@ -145,7 +145,7 @@ export class StakingClient {
 
   // Get a workflow given its project and workflow id.
   async getWorkflow(workflowId: string): Promise<Workflow> {
-    const name: string = `${parent}/workflows/${workflowId}`;
+    const name: string = `workflows/${workflowId}`;
     const path: string = `/v1/${name}`;
     const method: string = 'GET';
     const url: string = this.baseURL + '/orchestration';
@@ -185,12 +185,10 @@ export class StakingClient {
 
   // List workflows for a given project.
   async listWorkflows(
-    project: string,
     pageSize: number = 100,
     filter: string = '',
   ): Promise<ListWorkflowsResponse> {
-    const parent: string = `projects/${project}`;
-    const path: string = `/v1/${parent}/workflows`;
+    const path: string = `/v1/workflows`;
     const method: string = 'GET';
     const url: string = this.baseURL + '/orchestration';
 

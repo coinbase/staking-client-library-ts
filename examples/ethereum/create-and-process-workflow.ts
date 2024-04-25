@@ -9,9 +9,8 @@ import {
 import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
 import { calculateTimeDifference } from '../../src/utils/date';
 
-const projectId: string = ''; // replace with your project id
 const privateKey: string = ''; // replace with your private key
-const stakerAddress: string = ''; // replace with your staker address
+const stakerAddress: string = '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE'; // replace with your staker address
 const integrationAddress: string = '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b'; // replace with your integration address
 const amount: string = '123'; // replace with your amount
 const network: string = 'holesky'; // replace with your network
@@ -21,9 +20,9 @@ const client = new StakingClient();
 const signer = TxSignerFactory.getSigner('ethereum');
 
 async function stakePartialEth(): Promise<void> {
-  if (projectId === '' || privateKey === '' || stakerAddress === '') {
+  if (privateKey === '' || stakerAddress === '') {
     throw new Error(
-      'Please set the projectId, privateKey and stakerAddress variables in this file',
+      'Please set the privateKey and stakerAddress variables in this file',
     );
   }
 
@@ -35,7 +34,6 @@ async function stakePartialEth(): Promise<void> {
   try {
     // Create a new eth kiln stake workflow
     workflow = await client.Ethereum.stake(
-      projectId,
       network,
       stakerAddress,
       integrationAddress,
@@ -68,7 +66,7 @@ async function stakePartialEth(): Promise<void> {
     // If the workflow is waiting for external broadcast, sign and broadcast the unsigned tx externally and return back the tx hash via the PerformWorkflowStep API.
     // Note: In this example, we just log this message as the wallet provider needs to implement this logic.
     try {
-      workflow = await client.getWorkflow(projectId, workflowId);
+      workflow = await client.getWorkflow(workflowId);
     } catch (error) {
       // TODO: add retry logic for network errors
       if (error instanceof Error) {

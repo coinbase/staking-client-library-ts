@@ -9,7 +9,6 @@ import {
 import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
 import { calculateTimeDifference } from '../../src/utils/date';
 
-const projectId: string = ''; // replace with your project id
 const privateKey: string = ''; // replace with your private key
 const walletAddress: string = ''; // replace with your wallet address
 const validatorAddress: string = 'beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar'; // replace with your validator address
@@ -21,9 +20,9 @@ const client = new StakingClient();
 const signer = TxSignerFactory.getSigner('solana');
 
 async function stakeSolana(): Promise<void> {
-  if (projectId === '' || walletAddress === '') {
+  if (privateKey === '' || walletAddress === '') {
     throw new Error(
-      'Please set the projectId and stakerAddress variables in this file',
+      'Please set the privateKey and walletAddress variables in this file',
     );
   }
 
@@ -35,7 +34,6 @@ async function stakeSolana(): Promise<void> {
   try {
     // Create a new solana stake workflow
     workflow = await client.Solana.stake(
-      projectId,
       network,
       walletAddress,
       validatorAddress,
@@ -71,7 +69,7 @@ async function stakeSolana(): Promise<void> {
     // If the workflow is waiting for external broadcast, sign and broadcast the unsigned tx externally and return back the tx hash via the PerformWorkflowStep API.
     // Note: In this example, we just log this message as the wallet provider needs to implement this logic.
     try {
-      workflow = await client.getWorkflow(projectId, workflowId);
+      workflow = await client.getWorkflow(workflowId);
     } catch (error) {
       // TODO: add retry logic for network errors
       if (error instanceof Error) {

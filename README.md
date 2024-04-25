@@ -16,7 +16,7 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 
 ## Quick Start
 
-Prerequisite: [Node 18.12+](https://nodejs.org/en/blog/release/v18.12.0)
+Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 1. Install this package: `npm install @coinbase/staking-client-library-ts`
 2. Create and download an API key from the [Cloud Platform](https://portal.cloud.coinbase.com/access/api).
@@ -37,10 +37,9 @@ import { StakingClient } from "@coinbase/staking-client-library-ts";
 const client = new StakingClient();
 
 client.Ethereum.stake(
-  'your-project-id', // replace with your project id
   'holesky',
   true,
-  'your-wallet-address', // replace with your wallet address
+  '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', // replace with your wallet address
   '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b',
   '123',
 )

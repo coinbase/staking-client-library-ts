@@ -1,0 +1,24 @@
+name: TypeScript Lint
+
+on:
+  push:
+    # branches:
+    #   - master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+      - run: npm ci
+      - name: Run linter
+        run: npm run lint

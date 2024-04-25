@@ -22,7 +22,7 @@ const signer = TxSignerFactory.getSigner('ethereum');
 async function stakePartialEth(): Promise<void> {
   if (privateKey === '' || stakerAddress === '') {
     throw new Error(
-      'Please set the privateKey and stakerAddress variable in this file',
+      'Please set the privateKey and stakerAddress variables in this file',
     );
   }
 

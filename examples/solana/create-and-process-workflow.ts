@@ -21,7 +21,9 @@ const signer = TxSignerFactory.getSigner('solana');
 
 async function stakeSolana(): Promise<void> {
   if (walletAddress === '') {
-    throw new Error('Please set the stakerAddress variable in this file');
+    throw new Error(
+      'Please set the privateKey and stakerAddress variables in this file',
+    );
   }
 
   let unsignedTx = '';

@@ -37,7 +37,6 @@ import { StakingClient } from "@coinbase/staking-client-library-ts";
 const client = new StakingClient();
 
 client.Ethereum.stake(
-  'your-project-id', // replace with your project id
   'holesky',
   true,
   'your-wallet-address', // replace with your wallet address

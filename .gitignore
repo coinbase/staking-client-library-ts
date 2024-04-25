@@ -37,3 +37,6 @@ staking-client-*
 dist/
 
 node_modules/
+
+# VSCode configuration
+.vscode

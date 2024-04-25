@@ -24,7 +24,6 @@ export class Solana {
   }
 
   async stake(
-    projectId: string,
     network: string,
     walletAddress: string,
     validatorAddress: string,
@@ -46,11 +45,10 @@ export class Solana {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async unstake(
-    projectId: string,
     network: string,
     walletAddress: string,
     stakeAccountAddress: string,
@@ -72,11 +70,10 @@ export class Solana {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async claimStake(
-    projectId: string,
     network: string,
     walletAddress: string,
     stakeAccountAddress: string,
@@ -93,7 +90,7 @@ export class Solana {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async viewStakingContext(

@@ -24,7 +24,6 @@ export class Ethereum {
   }
 
   async stake(
-    projectId: string,
     network: string,
     stakerAddress: string,
     integratorContractAddress: string,
@@ -46,11 +45,10 @@ export class Ethereum {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async unstake(
-    projectId: string,
     network: string,
     stakerAddress: string,
     integratorContractAddress: string,
@@ -72,11 +70,10 @@ export class Ethereum {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async claimStake(
-    projectId: string,
     network: string,
     stakerAddress: string,
     integratorContractAddress: string,
@@ -93,7 +90,7 @@ export class Ethereum {
       },
     };
 
-    return this.parent.createWorkflow(projectId, req);
+    return this.parent.createWorkflow(req);
   }
 
   async viewStakingContext(

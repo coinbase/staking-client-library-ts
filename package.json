@@ -10,8 +10,8 @@
     "clean-gen": "rm -rf src/gen/* && rm -rf docs/openapi/*",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
-    "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*'",
-    "lint-fix": "eslint . --ext .ts --fix --ignore-pattern '/dist/*/*'"
+    "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*' --ignore-pattern '/src/gen/*/*'",
+    "lint-fix": "eslint . --ext .ts --fix --ignore-pattern '/dist/*/*' --ignore-pattern '/src/gen/*/*'"
   },
   "publishConfig": {
     "access": "public",

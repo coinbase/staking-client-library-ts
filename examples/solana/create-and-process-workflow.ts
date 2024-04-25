@@ -20,9 +20,9 @@ const client = new StakingClient();
 const signer = TxSignerFactory.getSigner('solana');
 
 async function stakeSolana(): Promise<void> {
-  if (walletAddress === '') {
+  if (privateKey === '' || walletAddress === '') {
     throw new Error(
-      'Please set the privateKey and stakerAddress variables in this file',
+      'Please set the privateKey and walletAddress variables in this file',
     );
   }
 

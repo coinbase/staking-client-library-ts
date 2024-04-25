@@ -10,7 +10,7 @@ const client = new StakingClient();
 
 async function stakeSolana(): Promise<void> {
   if (walletAddress === '') {
-    throw new Error('Please set the stakerAddress variable in this file');
+    throw new Error('Please set the walletAddress variable in this file');
   }
 
   let workflow: Workflow = {} as Workflow;

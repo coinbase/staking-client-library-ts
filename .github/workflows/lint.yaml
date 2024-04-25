@@ -2,8 +2,8 @@ name: TypeScript Lint
 
 on:
   push:
-    # branches:
-    #   - master
+    branches:
+      - master
   pull_request:
 
 permissions:

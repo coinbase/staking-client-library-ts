@@ -16,7 +16,7 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 
 ## Quick Start
 
-Prerequisite: [Node 18.12+](https://nodejs.org/en/blog/release/v18.12.0)
+Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 1. Install this package: `npm install @coinbase/staking-client-library-ts`
 2. Create and download an API key from the [Cloud Platform](https://portal.cloud.coinbase.com/access/api).

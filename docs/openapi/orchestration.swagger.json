@@ -481,7 +481,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/StakingServicePerformWorkflowStepBody"
+              "type": "object",
+              "properties": {
+                "step": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "The index of the step to be performed."
+                },
+                "data": {
+                  "type": "string",
+                  "description": "Transaction metadata. This is either the signed transaction or transaction hash depending on the workflow's broadcast method."
+                }
+              },
+              "description": "The request message for PerformWorkflowStep.",
+              "required": [
+                "step",
+                "data"
+              ]
             }
           }
         ],
@@ -728,25 +744,6 @@
       ],
       "default": "BALANCE_STATE_UNSPECIFIED",
       "description": "Represents the different states a stake account balance can have.\nUsed to check to see if stake is actively earning rewards or ready to be withdrawn.\n\n - BALANCE_STATE_UNSPECIFIED: The balance is not known.\n - BALANCE_STATE_INACTIVE: The balance is not actively staking.\n - BALANCE_STATE_ACTIVATING: The balance is in a warm up period and will activate in the next epoch.\n - BALANCE_STATE_ACTIVE: The balance is actively staking and earning rewards.\n - BALANCE_STATE_DEACTIVATING: The balance is in a cool down period and will be deactivated in the next epoch."
-    },
-    "StakingServicePerformWorkflowStepBody": {
-      "type": "object",
-      "properties": {
-        "step": {
-          "type": "integer",
-          "format": "int32",
-          "description": "The index of the step to be performed."
-        },
-        "data": {
-          "type": "string",
-          "description": "Transaction metadata. This is either the signed transaction or transaction hash depending on the workflow's broadcast method."
-        }
-      },
-      "description": "The request message for PerformWorkflowStep.",
-      "required": [
-        "step",
-        "data"
-      ]
     },
     "WaitStepOutputWaitUnit": {
       "type": "string",

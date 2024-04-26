@@ -409,7 +409,7 @@
         },
         "date": {
           "type": "string",
-          "description": "The date of the reward in format 'YYYY-MM-DD' in UTC.",
+          "title": "The date of the reward in format 'YYYY-MM-DD' in UTC.",
           "readOnly": true
         },
         "aggregationUnit": {
@@ -454,7 +454,7 @@
           "readOnly": true
         }
       },
-      "description": "Rewards earned within a particular period of time."
+      "title": "Rewards earned within a particular period of time."
     },
     "v1RewardRate": {
       "type": "object",
@@ -537,7 +537,7 @@
           "readOnly": true
         }
       },
-      "description": "The representation of a staking activity at a particular point in time."
+      "title": "The representation of a staking activity at a particular point in time."
     },
     "v1USDValue": {
       "type": "object",

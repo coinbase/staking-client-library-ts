@@ -9,3 +9,8 @@ plugins:
     opt:
       - allow_merge=true
       - merge_file_name=rewards
+      - Mcoinbase/staking/rewards/v1/reward_service.proto=github.com/coinbase/staking-client-library-ts
+      - Mcoinbase/staking/rewards/v1/reward.proto=github.com/coinbase/staking-client-library-ts
+      - Mcoinbase/staking/rewards/v1/stake.proto=github.com/coinbase/staking-client-library-ts
+      - Mcoinbase/staking/rewards/v1/common.proto=github.com/coinbase/staking-client-library-ts
+      - Mcoinbase/staking/rewards/v1/protocol.proto=github.com/coinbase/staking-client-library-ts

@@ -19,7 +19,7 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 1. Install this package: `npm install @coinbase/staking-client-library-ts`
-2. Create and download an API key from the [Cloud Platform](https://portal.cloud.coinbase.com/access/api).
+2. Create and download an API key from the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/access/api).
 3. Place the key named `.coinbase_cloud_api_key.json` at the root of this repository.
 4. Run one of the code samples [below](#stake-partial-eth-💠) or any of our [provided examples](./examples/) :rocket:.
 
@@ -155,4 +155,4 @@ client.Ethereum.listRewards(filter).then((resp) => {
 
 ## Documentation
 
-There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cloud.coinbase.com/) for detailed definitions, API specifications, integration guides, and more!
+There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/) for detailed definitions, API specifications, integration guides, and more!

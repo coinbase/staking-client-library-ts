@@ -54,6 +54,13 @@ export enum ProvisionInfraStepOutputState {
   STATE_FAILED = "STATE_FAILED",
 }
 
+export enum BulkTxStepOutputState {
+  STATE_UNSPECIFIED = "STATE_UNSPECIFIED",
+  STATE_IN_PROGRESS = "STATE_IN_PROGRESS",
+  STATE_FAILED = "STATE_FAILED",
+  STATE_COMPLETED = "STATE_COMPLETED",
+}
+
 export enum WorkflowState {
   STATE_UNSPECIFIED = "STATE_UNSPECIFIED",
   STATE_IN_PROGRESS = "STATE_IN_PROGRESS",
@@ -82,13 +89,18 @@ export type ProvisionInfraStepOutput = {
   state?: ProvisionInfraStepOutputState
 }
 
+export type BulkTxStepOutput = {
+  unsignedTxs?: string[]
+  state?: BulkTxStepOutputState
+}
+
 
 type BaseWorkflowStep = {
   name?: string
 }
 
 export type WorkflowStep = BaseWorkflowStep
-  & OneOf<{ txStepOutput: TxStepOutput; waitStepOutput: WaitStepOutput; provisionInfraStepOutput: ProvisionInfraStepOutput }>
+  & OneOf<{ txStepOutput: TxStepOutput; waitStepOutput: WaitStepOutput; provisionInfraStepOutput: ProvisionInfraStepOutput; bulkTxStepOutput: BulkTxStepOutput }>
 
 
 type BaseWorkflow = {

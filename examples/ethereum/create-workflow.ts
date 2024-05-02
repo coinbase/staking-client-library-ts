@@ -2,7 +2,6 @@ import { StakingClient } from '../../src/client/staking-client';
 import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
 
 const stakerAddress: string = '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE'; // replace with your staker address
-const integrationAddress: string = '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b'; // replace with your integration address
 const amount: string = '123'; // replace with your amount
 const network: string = 'holesky'; // replace with your network
 
@@ -17,14 +16,9 @@ async function stakePartialEth(): Promise<void> {
 
   try {
     // Create a new eth kiln stake workflow
-    workflow = await client.Ethereum.stake(
-      network,
-      stakerAddress,
-      integrationAddress,
-      amount,
-    );
+    workflow = await client.Ethereum.stake(network, stakerAddress, amount);
 
-    console.log('Workflow created %s ...', workflow.name);
+    console.log(JSON.stringify(workflow, null, 2));
   } catch (error) {
     let errorMessage = '';
 

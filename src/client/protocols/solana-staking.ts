@@ -26,8 +26,8 @@ export class Solana {
   async stake(
     network: string,
     walletAddress: string,
-    validatorAddress: string,
     amount: string,
+    validatorAddress?: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
       workflow: {

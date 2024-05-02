@@ -36,13 +36,7 @@ import { StakingClient } from "@coinbase/staking-client-library-ts";
 
 const client = new StakingClient();
 
-client.Ethereum.stake(
-  'holesky',
-  true,
-  '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', // replace with your wallet address
-  '0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b',
-  '123',
-)
+client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '123')
   .then((workflow) => {
     console.log('Workflow created %s', workflow.name);
   })
@@ -57,7 +51,40 @@ client.Ethereum.stake(
      <summary>Output</summary>
 
    ```text
-   Workflow created: projects/62376b2f-3f24-42c9-9025-d576a3c06d6f/workflows/ffbf9b45-c57b-49cb-a4d5-fdab66d8cb25
+   Workflow created workflows/c34df125-a989-438d-8451-bd403423986a
+   ```
+
+   </details>
+
+### Stake SOL :diamond_shape_with_a_dot_inside:
+
+This code sample creates a SOL staking workflow. View the full code sample [here](examples/solana/create-workflow.ts)
+
+<details open>
+  <summary>Code Sample</summary>
+
+```typescript
+// examples/solana/create-workflow.ts
+import { StakingClient } from "@coinbase/staking-client-library-ts";
+
+const client = new StakingClient();
+
+client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '100000000')
+  .then((workflow) => {
+    console.log('Workflow created %s', workflow.name);
+  })
+  .catch(() => {
+    throw new Error(`Error creating workflow`);
+  });
+```
+
+</details>
+
+   <details>
+     <summary>Output</summary>
+
+   ```text
+   Workflow created workflows/e6373b20-edf0-4cf9-91ea-709328d0d63e
    ```
 
    </details>
@@ -152,6 +179,28 @@ client.Ethereum.listRewards(filter).then((resp) => {
    ```
 
    </details>
+
+## Build
+
+Here are some helpful commands to build and lint the project:
+
+### Generate client code
+
+```shell
+npm run gen
+```
+
+### Lint
+
+```shell
+npm run lint
+```
+
+### Lint Fix
+
+```shell
+npm run lint-fix
+```
 
 ## Documentation
 

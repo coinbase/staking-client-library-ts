@@ -26,8 +26,8 @@ export class Ethereum {
   async stake(
     network: string,
     stakerAddress: string,
-    integratorContractAddress: string,
     amount: string,
+    integratorContractAddress?: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
       workflow: {
@@ -51,8 +51,8 @@ export class Ethereum {
   async unstake(
     network: string,
     stakerAddress: string,
-    integratorContractAddress: string,
     amount: string,
+    integratorContractAddress?: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
       workflow: {
@@ -76,7 +76,7 @@ export class Ethereum {
   async claimStake(
     network: string,
     stakerAddress: string,
-    integratorContractAddress: string,
+    integratorContractAddress?: string,
   ): Promise<Workflow> {
     const req: CreateWorkflowRequest = {
       workflow: {

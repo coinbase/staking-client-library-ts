@@ -1,10 +1,9 @@
 import { StakingClient } from '../../src/client/staking-client';
 import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
 
-const walletAddress: string = ''; // replace with your wallet address
-const validatorAddress: string = 'beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar'; // replace with your validator address
+const walletAddress: string = '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z'; // replace with your wallet address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
-const network: string = 'mainnet'; // replace with your network
+const network: string = 'devnet'; // replace with your network
 
 const client = new StakingClient();
 
@@ -17,14 +16,9 @@ async function stakeSolana(): Promise<void> {
 
   try {
     // Create a new solana stake workflow
-    workflow = await client.Solana.stake(
-      network,
-      walletAddress,
-      validatorAddress,
-      amount,
-    );
+    workflow = await client.Solana.stake(network, walletAddress, amount);
 
-    console.log('Workflow created %s ...', workflow.name);
+    console.log(JSON.stringify(workflow, null, 2));
   } catch (error) {
     let errorMessage = '';
 

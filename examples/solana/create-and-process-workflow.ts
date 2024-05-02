@@ -11,7 +11,6 @@ import { calculateTimeDifference } from '../../src/utils/date';
 
 const privateKey: string = ''; // replace with your private key
 const walletAddress: string = ''; // replace with your wallet address
-const validatorAddress: string = 'beefKGBWeSpHzYBHZXwp5So7wdQGX6mu4ZHCsH3uTar'; // replace with your validator address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
 const network: string = 'mainnet'; // replace with your network
 
@@ -33,12 +32,7 @@ async function stakeSolana(): Promise<void> {
 
   try {
     // Create a new solana stake workflow
-    workflow = await client.Solana.stake(
-      network,
-      walletAddress,
-      validatorAddress,
-      amount,
-    );
+    workflow = await client.Solana.stake(network, walletAddress, amount);
 
     workflowId = workflow.name?.split('/').pop() || '';
     if (workflowId == null || workflowId === '') {

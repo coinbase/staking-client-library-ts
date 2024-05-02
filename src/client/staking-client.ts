@@ -130,7 +130,7 @@ export class StakingClient {
     return StakingService.ViewStakingContext(req, initReq);
   }
 
-  // Create a workflow under a given project. This function takes the entire req object as input.
+  // Create a workflow under a project inferred from your API key. This function takes the entire req object as input.
   // Use the protocol-specific helper functions like Ethereum.Stake to create a protocol and action specific workflow.
   async createWorkflow(req: CreateWorkflowRequest): Promise<Workflow> {
     const path: string = `/v1/workflows`;
@@ -143,7 +143,7 @@ export class StakingClient {
     return StakingService.CreateWorkflow(req, initReq);
   }
 
-  // Get a workflow given its project and workflow id.
+  // Get a workflow given workflow id and project inferred from your API key.
   async getWorkflow(workflowId: string): Promise<Workflow> {
     const name: string = `workflows/${workflowId}`;
     const path: string = `/v1/${name}`;
@@ -183,7 +183,7 @@ export class StakingClient {
     return StakingService.PerformWorkflowStep(req, initReq);
   }
 
-  // List workflows for a given project.
+  // List workflows for your project inferred from your API key.
   async listWorkflows(
     pageSize: number = 100,
     filter: string = '',

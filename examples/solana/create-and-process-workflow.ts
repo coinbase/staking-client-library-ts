@@ -12,7 +12,7 @@ import { calculateTimeDifference } from '../../src/utils/date';
 const privateKey: string = ''; // replace with your private key
 const walletAddress: string = ''; // replace with your wallet address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
-const network: string = 'mainnet'; // replace with your network
+const network: string = 'devnet'; // replace with your network
 
 const client = new StakingClient();
 

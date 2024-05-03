@@ -3,7 +3,7 @@ import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workfl
 
 const walletAddress: string = '9NL2SkpcsdyZwsG8NmHGNra4i4NSyKbJTVd9fUQ7kJHR'; // replace with your wallet address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
-const network: string = 'mainnet'; // replace with your network
+const network: string = 'devnet'; // replace with your network
 
 const client = new StakingClient();
 

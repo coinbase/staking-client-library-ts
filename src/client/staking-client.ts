@@ -47,15 +47,25 @@ const DEFAULT_URL = 'https://api.developer.coinbase.com/staking';
 
 export class StakingClient {
   readonly baseURL: string;
+  readonly apiKeyName: string | undefined;
+  readonly apiPrivateKey: string | undefined;
   readonly Ethereum: Ethereum;
   readonly Solana: Solana;
   readonly Cosmos: Cosmos;
 
-  constructor(baseURL?: string) {
+  constructor(apiKeyName?: string, apiPrivateKey?: string, baseURL?: string) {
     if (baseURL) {
       this.baseURL = baseURL;
     } else {
       this.baseURL = DEFAULT_URL;
+    }
+
+    if (apiKeyName) {
+      this.apiKeyName = apiKeyName;
+    }
+
+    if (apiPrivateKey) {
+      this.apiPrivateKey = apiPrivateKey;
     }
 
     this.Ethereum = new Ethereum(this);
@@ -70,7 +80,13 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     const req: ListProtocolsRequest = {};
 
@@ -85,7 +101,13 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     const req: ListNetworksRequest = {
       parent: parent,
@@ -105,8 +127,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
-
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
     const req: ListActionsRequest = {
       parent: parent,
     };
@@ -125,7 +153,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     return StakingService.ViewStakingContext(req, initReq);
   }
@@ -138,7 +173,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     return StakingService.CreateWorkflow(req, initReq);
   }
@@ -151,7 +193,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     const req: GetWorkflowRequest = {
       name: name,
@@ -172,7 +221,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     const req: PerformWorkflowStepRequest = {
       name: name,
@@ -193,7 +249,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     const req: ListWorkflowsRequest = {
       pageSize: pageSize,
@@ -214,7 +277,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/rewards';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     return RewardService.ListRewards(req, initReq);
   }
@@ -230,7 +300,14 @@ export class StakingClient {
     const url: string = this.baseURL + '/rewards';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(url, path, method);
+    // Generate the JWT token and get the auth details as a initReq object.
+    const initReq = await getAuthDetails(
+      url,
+      path,
+      method,
+      this.apiKeyName,
+      this.apiPrivateKey,
+    );
 
     return RewardService.ListStakes(req, initReq);
   }
@@ -265,9 +342,11 @@ async function getAuthDetails(
   url: string,
   path: string,
   method: string,
+  apiKeyName?: string,
+  apiPrivateKey?: string,
 ): Promise<fm.InitReq> {
   // Generate the JWT token
-  const token = await buildJWT(url + path, method);
+  const token = await buildJWT(url + path, method, apiKeyName, apiPrivateKey);
 
   return {
     pathPrefix: url,

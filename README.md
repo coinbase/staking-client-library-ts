@@ -22,14 +22,17 @@ Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
    ```shell
    npm install @coinbase/staking-client-library-ts
    ```
-2. Create and download an API key from the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/access/api).
-3. Place the key named `.coinbase_cloud_api_key.json` at the root of this repository.
-4. Install necessary Typescript dependencies:
+
+2. Install necessary Typescript dependencies:
    ```shell
-    npm install -g ts-node
-    npm install -g typescript
-    ```
-5. Copy and paste one of the code samples below or any of our [provided examples](./examples/) into an `example.ts` file and run it with `ts-node` :rocket:
+   npm install -g ts-node typescript
+   ```
+
+3. Get your API keys info such as api key name and api private key from here: https://portal.cdp.coinbase.com/access/api. <br>
+   These will be used in order to set up our client later in the example code. <br>
+   For detailed instructions refer to our api key setup guide [here](https://docs.cdp.coinbase.com/developer-platform/docs/cdp-keys).
+
+4. Copy and paste one of the code samples below or any of our [provided examples](./examples/) into an `example.ts` file and run it with `ts-node` :rocket:
    ```shell
    ts-node example.ts
    ```
@@ -45,7 +48,11 @@ This code sample creates an ETH staking workflow. View the full code sample [her
 // examples/ethereum/create-workflow.ts
 import { StakingClient } from "@coinbase/staking-client-library-ts";
 
-const client = new StakingClient();
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '123')
   .then((workflow) => {
@@ -108,7 +115,11 @@ This code sample creates a SOL staking workflow. View the full code sample [here
 // examples/solana/create-workflow.ts
 import { StakingClient } from "@coinbase/staking-client-library-ts";
 
-const client = new StakingClient();
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '100000000')
   .then((workflow) => {
@@ -175,12 +186,16 @@ This code sample returns rewards for an Ethereum validator address. View the ful
 // examples/ethereum/list-rewards.ts
 import { StakingClient } from "@coinbase/staking-client-library-ts";
 
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
+
 // Defines which address and rewards we want to see
 const address: string =
   '0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474';
 const filter: string = `address='${address}' AND period_end_time > '2024-02-25T00:00:00Z' AND period_end_time < '2024-02-27T00:00:00Z'`;
-
-const client = new StakingClient();
 
 // Loops through rewards array and prints each reward
 client.Ethereum.listRewards(filter).then((resp) => {

@@ -9,19 +9,23 @@ import {
 import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workflow.pb';
 import { calculateTimeDifference } from '../../src/utils/date';
 
-const privateKey: string = ''; // replace with your private key
+const walletPrivateKey: string = 'your-wallet-private-key'; // replace with your wallet's private key
 const walletAddress: string = ''; // replace with your wallet address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
 const network: string = 'mainnet'; // replace with your network
 
-const client = new StakingClient();
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 const signer = TxSignerFactory.getSigner('solana');
 
 async function stakeSolana(): Promise<void> {
-  if (privateKey === '' || walletAddress === '') {
+  if (walletPrivateKey === '' || walletAddress === '') {
     throw new Error(
-      'Please set the privateKey and walletAddress variables in this file',
+      'Please set the walletPrivateKey and walletAddress variables in this file',
     );
   }
 
@@ -83,7 +87,10 @@ async function stakeSolana(): Promise<void> {
       }
 
       console.log('Signing unsigned tx %s ...', unsignedTx);
-      const signedTx = await signer.signTransaction(privateKey, unsignedTx);
+      const signedTx = await signer.signTransaction(
+        walletPrivateKey,
+        unsignedTx,
+      );
 
       console.log(
         'Please broadcast this signed tx %s externally and return back the tx hash via the PerformWorkflowStep API ...',

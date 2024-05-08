@@ -8,20 +8,35 @@ const pemFooter = '-----END EC PRIVATE KEY-----';
 
 /**
  * Build a JWT for the specified service and URI.
- * @param service The name of the service.
- * @param uri The URI for which the JWT is to be generated.
  * @returns The generated JWT.
+ * @param url The URL for which the JWT is to be generated.
+ * @param method The HTTP method for the request.
+ * @param apiKeyName The name of the API key.
+ * @param apiPrivateKey The private key present in the API key downloaded from platform.
  */
 export const buildJWT = async (
   url: string,
   method = 'GET',
+  apiKeyName?: string,
+  apiPrivateKey?: string,
 ): Promise<string> => {
-  const keyFile = readFileSync('.coinbase_cloud_api_key.json', {
-    encoding: 'utf8',
-  });
-  const apiKey: APIKey = JSON.parse(keyFile);
+  let pemPrivateKey: string;
+  let keyName: string;
+  let apiKey: APIKey;
 
-  const pemPrivateKey = extractPemKey(apiKey.privateKey);
+  if (apiKeyName && apiPrivateKey) {
+    pemPrivateKey = extractPemKey(apiPrivateKey);
+    keyName = apiKeyName;
+  } else {
+    const keyFile = readFileSync('.coinbase_cloud_api_key.json', {
+      encoding: 'utf8',
+    });
+
+    apiKey = JSON.parse(keyFile);
+    pemPrivateKey = extractPemKey(apiKey.privateKey);
+    keyName = apiKey.name;
+  }
+
   let privateKey: JWK.Key;
 
   try {
@@ -35,7 +50,7 @@ export const buildJWT = async (
 
   const header = {
     alg: 'ES256',
-    kid: apiKey.name,
+    kid: keyName,
     typ: 'JWT',
     nonce: nonce(),
   };
@@ -44,7 +59,7 @@ export const buildJWT = async (
   const uri = `${method} ${url.substring(8)}`;
 
   const claims: APIKeyClaims = {
-    sub: apiKey.name,
+    sub: keyName,
     iss: 'coinbase-cloud',
     nbf: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 60, // +1 minute
@@ -103,7 +118,7 @@ interface APIKeyClaims {
  */
 const extractPemKey = (privateKeyString: string): string => {
   // Remove all newline characters
-  privateKeyString = privateKeyString.replace(/\n/g, '');
+  privateKeyString = privateKeyString.replace(/\\n|\n/g, '');
 
   // If the string starts with the standard PEM header and footer, return as is.
   if (

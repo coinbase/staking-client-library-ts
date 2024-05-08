@@ -5,7 +5,11 @@ const walletAddress: string = '9NL2SkpcsdyZwsG8NmHGNra4i4NSyKbJTVd9fUQ7kJHR'; //
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
 const network: string = 'mainnet'; // replace with your network
 
-const client = new StakingClient();
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 async function stakeSolana(): Promise<void> {
   if (walletAddress === '') {

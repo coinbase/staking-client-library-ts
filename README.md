@@ -18,10 +18,21 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 
 Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
-1. Install this package: `npm install @coinbase/staking-client-library-ts`
+1. Navigate to your project directory where you would like to set up this client, and install it via:
+   ```shell
+   npm install @coinbase/staking-client-library-ts
+   ```
 2. Create and download an API key from the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/access/api).
 3. Place the key named `.coinbase_cloud_api_key.json` at the root of this repository.
-4. Run one of the code samples [below](#stake-partial-eth-💠) or any of our [provided examples](./examples/) :rocket:.
+4. Install necessary tools/packages to get typescript files compiled and running:
+   ```shell
+    npm install -g ts-node
+    npm install -g typescript
+    ```
+5. Copy and paste one of the code samples below or any of our [provided examples](./examples/) into an `example.ts` file and run it with `ts-node` :rocket:
+   ```shell
+   ts-node example.ts
+   ```
 
 ### Stake Partial ETH :diamond_shape_with_a_dot_inside:
 
@@ -38,7 +49,7 @@ const client = new StakingClient();
 
 client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '123')
   .then((workflow) => {
-    console.log('Workflow created %s', workflow.name);
+    console.log(JSON.stringify(workflow, null, 2));
   })
   .catch(() => {
     throw new Error(`Error creating workflow`);
@@ -51,7 +62,37 @@ client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '
      <summary>Output</summary>
 
    ```text
-   Workflow created workflows/c34df125-a989-438d-8451-bd403423986a
+   {
+     "name": "workflows/baecd951-838f-44ec-b7b5-20e1820c09dc",
+     "action": "protocols/ethereum_kiln/networks/holesky/actions/stake",
+     "ethereumKilnStakingParameters": {
+       "stakeParameters": {
+         "stakerAddress": "0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE",
+         "integratorContractAddress": "0xA55416de5DE61A0AC1aa8970a280E04388B1dE4b",
+         "amount": {
+           "value": "123",
+           "currency": "ETH"
+         }
+       }
+     },
+     "state": "STATE_WAITING_FOR_EXT_BROADCAST",
+     "currentStepId": 0,
+     "steps": [
+       {
+         "name": "stake tx",
+         "txStepOutput": {
+           "unsignedTx": "02f3824268068502540be4008503c1b8346683061a8094a55416de5de61a0ac1aa8970a280e04388b1de4b7b843a4b66f1c0808080",
+           "signedTx": "",
+           "txHash": "",
+           "state": "STATE_PENDING_EXT_BROADCAST",
+           "errorMessage": ""
+         }
+       }
+     ],
+     "createTime": "2024-05-08T15:24:57.480231386Z",
+     "updateTime": "2024-05-08T15:24:57.480231386Z",
+     "completeTime": null
+   }
    ```
 
    </details>
@@ -71,7 +112,7 @@ const client = new StakingClient();
 
 client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '100000000')
   .then((workflow) => {
-    console.log('Workflow created %s', workflow.name);
+    console.log(JSON.stringify(workflow, null, 2));
   })
   .catch(() => {
     throw new Error(`Error creating workflow`);
@@ -84,7 +125,41 @@ client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '10
      <summary>Output</summary>
 
    ```text
-   Workflow created workflows/e6373b20-edf0-4cf9-91ea-709328d0d63e
+   {
+     "name": "workflows/2cd484db-56fe-4c8b-a53d-8039c8f27547",
+     "action": "protocols/solana/networks/devnet/actions/stake",
+     "solanaStakingParameters": {
+       "stakeParameters": {
+         "walletAddress": "8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z",
+         "validatorAddress": "GkqYQysEGmuL6V2AJoNnWZUz2ZBGWhzQXsJiXm2CLKAN",
+         "amount": {
+           "value": "100000000",
+           "currency": "SOL"
+         },
+         "priorityFee": {
+           "computeUnitLimit": "0",
+           "unitPrice": "0"
+         }
+       }
+     },
+     "state": "STATE_WAITING_FOR_EXT_BROADCAST",
+     "currentStepId": 0,
+     "steps": [
+       {
+         "name": "stake tx",
+         "txStepOutput": {
+           "unsignedTx": "66hEYYWnwGWkGpMKF2H2sCzxnmoAfY8LPnYMgWdY6rC7hX2H6DEE2YdPxECFx8FeeNmea8N87L4KuZ6dirYXZi9XNr5uPJdf8W1jdShcSwzSmmqz4SA7dmFjdTM19hNEu7hMMF7C2Vcm8zka9FErt4wyshJNXYXM6cbJ8UUypGAb8g4vQDMoVavSiVFWxMGE5Sv7JL2gXkFEz2UbxvX7t6W2UbhDtt7545km4rQtFcrMTahmaoqaTMysLuoMcJpzps1c7pCigthYYcBN7yxF4zVZHJHbMXqFuap1BAb2MCYeBxk4krzGJNR3Avo6seVVthxMLHqExv8Yzrdvufn61xv6S4DGQdhbbUM2auGi5b45bkJ4EEHKMhEXqXWrYHSQQMbtgJ2EP4zNiSK8avPREuUQS4BS1aRUF3zT8bkEfWDfp5EjxAs6fumYZCkRKsyjRHEZMN6m9fwESmJqdJPeTJUrZkkvhJZCszPdeTNxSzrUnaeQ2oLvmw29MXVzdvx9gzpa1AKP9YcWjjbZGBkBrYnKzS6KkDBvi2uvo633eqJCrMzRDrVsvQPAi9kTQcqMFt567WotqbF9EBhfAKMss9G9eHXeVCGPa7P2kG9Whix2adaatpi6B6yUjfHFKwXNyXrTUM5UnjCBW9PoLyjPve8q6x6HqVb63v97B29HjguuEZhMjrMctXpPB4EVhemczKitdsYaQRFzsV1R3XVHnfha2BwTyw5B9U7uYFqdrfKwwszni5aqvAsSV3YwGEuwMrZSaCYVub5DtDaqKiJee138tGsn16bg6seb5jZeEiguaAmwDrXY9nT4ihvh4Gqtao4BoipSvb3vQJsjG4KAxTQWb3HFqQXUoVrs81sRh64amtg7or4Pwj8F5fMwx6VyqHW8BbfA4CaXrfunWLKo5Qap1gNnaV9WxoN9n9bKsJ9fS2PQgtX",
+           "signedTx": "",
+           "txHash": "",
+           "state": "STATE_PENDING_EXT_BROADCAST",
+           "errorMessage": ""
+         }
+       }
+     ],
+     "createTime": "2024-05-08T15:25:58.265307812Z",
+     "updateTime": "2024-05-08T15:25:58.265307812Z",
+     "completeTime": null
+   }
    ```
 
    </details>
@@ -97,6 +172,7 @@ This code sample returns rewards for an Ethereum validator address. View the ful
   <summary>Code Sample</summary>
 
 ```typescript
+// examples/ethereum/list-rewards.ts
 import { StakingClient } from "@coinbase/staking-client-library-ts";
 
 // Defines which address and rewards we want to see
@@ -186,4 +262,4 @@ Thanks for considering contributing to the project! Please refer to [our contrib
 
 ## Documentation
 
-There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/) for detailed definitions, API specifications, integration guides, and more!
+There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/staking/docs/welcome) for detailed definitions, API specifications, integration guides, and more!

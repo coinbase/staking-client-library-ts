@@ -24,7 +24,7 @@ Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
    ```
 2. Create and download an API key from the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/access/api).
 3. Place the key named `.coinbase_cloud_api_key.json` at the root of this repository.
-4. Install necessary tools/packages to get typescript files compiled and running:
+4. Install necessary Typescript dependencies:
    ```shell
     npm install -g ts-node
     npm install -g typescript

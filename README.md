@@ -180,27 +180,9 @@ client.Ethereum.listRewards(filter).then((resp) => {
 
    </details>
 
-## Build
+## Contributing
 
-Here are some helpful commands to build and lint the project:
-
-### Generate client code
-
-```shell
-npm run gen
-```
-
-### Lint
-
-```shell
-npm run lint
-```
-
-### Lint Fix
-
-```shell
-npm run lint-fix
-```
+Thanks for considering contributing to the project! Please refer to [our contribution guide](./CONTRIBUTING.md).
 
 ## Documentation
 

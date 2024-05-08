@@ -18,7 +18,7 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 
 Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
-1. Navigate to your project directory where you would like to set up this client, and install it via:
+1. In a fresh directory, run:
    ```shell
    npm install @coinbase/staking-client-library-ts
    ```

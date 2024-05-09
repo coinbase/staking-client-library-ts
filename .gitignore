@@ -40,3 +40,5 @@ node_modules/
 
 # VSCode configuration
 .vscode
+
+docs/**/*.json

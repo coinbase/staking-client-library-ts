@@ -105,7 +105,7 @@ client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '
 
 ### Stake SOL :diamond_shape_with_a_dot_inside:
 
-This code sample helps stake certain amount of SOL from a given user wallet. View the full source [here](examples/solana/create-workflow.ts)
+This code sample helps stake SOL from a given user wallet. View the full source [here](examples/solana/create-workflow.ts)
 
 <details open>
 

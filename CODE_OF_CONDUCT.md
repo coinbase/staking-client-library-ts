@@ -27,7 +27,7 @@ Unacceptable behavior from any community member will not be tolerated and includ
 
 ## 4. Reporting Issues
 
-If you experience or witness unacceptable behavior—or have any other concerns—please report it by DMing a moderator in the [CDP Discord](https://discord.gg/cdp). All reports will be handled with discretion.
+If you experience or witness unacceptable behavior—or have any other concerns—please [start a thread in the CDP Discord](https://discord.com/channels/1220414409550336183/1220416552965247046/1232387370125492244).
 
 ## 5. Consequences for Unacceptable Behavior
 

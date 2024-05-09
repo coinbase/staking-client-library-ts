@@ -15,7 +15,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Official Repository
 
-We use Github to host code, track issues, and accept pull requests. This Github repository is the "official" repository of this project. All changes/fixes/suggestions should be submitted here (i.e. github.com/coinbase/staking-client-library-go)
+We use Github to host code, track issues, and accept pull requests. This Github repository is the "official" repository of this project. All changes/fixes/suggestions should be submitted here (i.e. github.com/coinbase/staking-client-library-ts)
 
 ## Reporting Bugs
 

@@ -10,7 +10,7 @@ import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workfl
 import { calculateTimeDifference } from '../../src/utils/date';
 
 const walletPrivateKey: string = 'your-wallet-private-key'; // replace with your wallet's private key
-const stakerAddress: string = '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE'; // replace with your staker address
+const stakerAddress: string = 'your-wallet-address'; // replace with your staker address
 const amount: string = '123'; // replace with your amount
 const network: string = 'holesky'; // replace with your network
 
@@ -32,16 +32,10 @@ async function stakePartialEth(): Promise<void> {
   let unsignedTx = '';
   let workflow: Workflow = {} as Workflow;
   let currentStepId: number | undefined;
-  let workflowId: string;
 
   try {
     // Create a new eth kiln stake workflow
     workflow = await client.Ethereum.stake(network, stakerAddress, amount);
-
-    workflowId = workflow.name?.split('/').pop() || '';
-    if (workflowId == null || workflowId === '') {
-      throw new Error('Unexpected workflow state. workflowId is null');
-    }
 
     currentStepId = workflow.currentStepId;
     if (currentStepId == null) {
@@ -64,7 +58,7 @@ async function stakePartialEth(): Promise<void> {
     // If the workflow is waiting for external broadcast, sign and broadcast the unsigned tx externally and return back the tx hash via the PerformWorkflowStep API.
     // Note: In this example, we just log this message as the wallet provider needs to implement this logic.
     try {
-      workflow = await client.getWorkflow(workflowId);
+      workflow = await client.getWorkflow(workflow.name!);
     } catch (error) {
       // TODO: add retry logic for network errors
       if (error instanceof Error) {

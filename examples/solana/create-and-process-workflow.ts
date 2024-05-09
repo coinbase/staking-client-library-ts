@@ -32,16 +32,10 @@ async function stakeSolana(): Promise<void> {
   let unsignedTx = '';
   let workflow: Workflow = {} as Workflow;
   let currentStepId: number | undefined;
-  let workflowId: string;
 
   try {
     // Create a new solana stake workflow
     workflow = await client.Solana.stake(network, walletAddress, amount);
-
-    workflowId = workflow.name?.split('/').pop() || '';
-    if (workflowId == null || workflowId === '') {
-      throw new Error('Unexpected workflow state. workflowId is null');
-    }
 
     currentStepId = workflow.currentStepId;
     if (currentStepId == null) {
@@ -67,7 +61,7 @@ async function stakeSolana(): Promise<void> {
     // If the workflow is waiting for external broadcast, sign and broadcast the unsigned tx externally and return back the tx hash via the PerformWorkflowStep API.
     // Note: In this example, we just log this message as the wallet provider needs to implement this logic.
     try {
-      workflow = await client.getWorkflow(workflowId);
+      workflow = await client.getWorkflow(workflow.name!);
     } catch (error) {
       // TODO: add retry logic for network errors
       if (error instanceof Error) {

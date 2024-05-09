@@ -5,7 +5,11 @@ const stakerAddress: string = '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE'; // r
 const amount: string = '123'; // replace with your amount
 const network: string = 'holesky'; // replace with your network
 
-const client = new StakingClient();
+// Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
+const apiKeyName: string = 'your-api-key-name';
+const apiPrivateKey: string = 'your-api-private-key';
+
+const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 async function stakePartialEth(): Promise<void> {
   if (stakerAddress === '') {

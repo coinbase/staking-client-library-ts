@@ -270,7 +270,7 @@ client.Ethereum.listRewards(filter).then((resp) => {
 
 ## Documentation
 
-There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/staking/docs/welcome) for detailed definitions, API specifications, integration guides, and more!
+There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/staking/docs/welcome) for detailed definitions, [API specification](https://docs.cdp.coinbase.com/staking/reference), integration guides, and more!
 
 ## Contributing
 

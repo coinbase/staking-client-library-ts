@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "gen": "npm run clean-gen && ./scripts/generate-client.sh",
-    "clean-gen": "rm -rf src/gen/* && rm -rf docs/openapi/*",
+    "clean-gen": "rm -rf src/gen/*",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
     "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*' --ignore-pattern '/src/gen/*/*'",

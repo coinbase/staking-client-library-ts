@@ -10,9 +10,9 @@ import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workfl
 import { calculateTimeDifference } from '../../src/utils/date';
 
 const walletPrivateKey: string = 'your-wallet-private-key'; // replace with your wallet's private key
-const walletAddress: string = ''; // replace with your wallet address
+const walletAddress: string = 'your-wallet-address'; // replace with your wallet address
 const amount: string = '100000000'; // replace with your amount. For solana it should be >= 0.1 SOL
-const network: string = 'mainnet'; // replace with your network
+const network: string = 'devnet'; // replace with your network
 
 // Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api
 const apiKeyName: string = 'your-api-key-name';

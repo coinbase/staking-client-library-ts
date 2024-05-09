@@ -186,8 +186,8 @@ export class StakingClient {
   }
 
   // Get a workflow given workflow id.
-  async getWorkflow(workflow_name: string): Promise<Workflow> {
-    const path: string = `/v1/${workflow_name}`;
+  async getWorkflow(workflowName: string): Promise<Workflow> {
+    const path: string = `/v1/${workflowName}`;
     const method: string = 'GET';
     const url: string = this.baseURL + '/orchestration';
 
@@ -202,7 +202,7 @@ export class StakingClient {
     );
 
     const req: GetWorkflowRequest = {
-      name: workflow_name,
+      name: workflowName,
     };
 
     return StakingService.GetWorkflow(req, initReq);
@@ -210,11 +210,11 @@ export class StakingClient {
 
   // Return back a signed tx or a broadcasted tx hash for a given workflow and step number.
   async performWorkflowStep(
-    workflow_name: string,
+    workflowName: string,
     stepIndex: number,
     data: string,
   ): Promise<Workflow> {
-    const name: string = `${parent}/${workflow_name}`;
+    const name: string = `${parent}/${workflowName}`;
     const path: string = `/v1/${name}/step`;
     const method: string = 'POST';
     const url: string = this.baseURL + '/orchestration';

@@ -10,7 +10,7 @@ import { Workflow } from '../../src/gen/coinbase/staking/orchestration/v1/workfl
 import { calculateTimeDifference } from '../../src/utils/date';
 
 const walletPrivateKey: string = 'your-wallet-private-key'; // replace with your wallet's private key
-const stakerAddress: string = '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE'; // replace with your staker address
+const stakerAddress: string = 'your-wallet-address'; // replace with your staker address
 const amount: string = '123'; // replace with your amount
 const network: string = 'holesky'; // replace with your network
 

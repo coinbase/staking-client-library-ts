@@ -39,10 +39,9 @@ Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 ### Stake Partial ETH :diamond_shape_with_a_dot_inside:
 
-This code sample creates an ETH staking workflow. View the full code sample [here](examples/ethereum/create-workflow.ts)
+This code sample helps stake partial ETH (non-multiples of 32 ETH). View the full source [here](examples/ethereum/create-workflow.ts)
 
 <details open>
-  <summary>Code Sample</summary>
 
 ```typescript
 // examples/ethereum/create-workflow.ts
@@ -59,7 +58,7 @@ client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '
     console.log(JSON.stringify(workflow, null, 2));
   })
   .catch(() => {
-    throw new Error(`Error creating workflow`);
+    throw new Error('Error running stake action on ethereum');
   });
 ```
 
@@ -106,10 +105,9 @@ client.Ethereum.stake('holesky', '0xdb816889F2a7362EF242E5a717dfD5B38Ae849FE', '
 
 ### Stake SOL :diamond_shape_with_a_dot_inside:
 
-This code sample creates a SOL staking workflow. View the full code sample [here](examples/solana/create-workflow.ts)
+This code sample helps stake SOL from a given user wallet. View the full source [here](examples/solana/create-workflow.ts)
 
 <details open>
-  <summary>Code Sample</summary>
 
 ```typescript
 // examples/solana/create-workflow.ts
@@ -126,7 +124,7 @@ client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '10
     console.log(JSON.stringify(workflow, null, 2));
   })
   .catch(() => {
-    throw new Error(`Error creating workflow`);
+    throw new Error('Error running stake action on solana');
   });
 ```
 
@@ -177,10 +175,9 @@ client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '10
 
 ### View Ethereum Rewards :moneybag:
 
-This code sample returns rewards for an Ethereum validator address. View the full code sample [here](examples/ethereum/list-rewards.ts).
+This code sample helps view rewards for an Ethereum validator address. View the full source [here](examples/ethereum/list-rewards.ts).
 
 <details open>
-  <summary>Code Sample</summary>
 
 ```typescript
 // examples/ethereum/list-rewards.ts
@@ -271,10 +268,10 @@ client.Ethereum.listRewards(filter).then((resp) => {
 
    </details>
 
-## Contributing
-
-Thanks for considering contributing to the project! Please refer to [our contribution guide](./CONTRIBUTING.md).
-
 ## Documentation
 
 There are numerous examples in the [`examples directory`](./examples) to help get you started. For even more, refer to our [documentation website](https://docs.cdp.coinbase.com/staking/docs/welcome) for detailed definitions, API specifications, integration guides, and more!
+
+## Contributing
+
+Thanks for considering contributing to the project! Please refer to [our contribution guide](./CONTRIBUTING.md).

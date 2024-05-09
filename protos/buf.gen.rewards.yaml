@@ -14,3 +14,4 @@ plugins:
       - Mcoinbase/staking/rewards/v1/stake.proto=github.com/coinbase/staking-client-library-ts
       - Mcoinbase/staking/rewards/v1/common.proto=github.com/coinbase/staking-client-library-ts
       - Mcoinbase/staking/rewards/v1/protocol.proto=github.com/coinbase/staking-client-library-ts
+      - Mcoinbase/staking/rewards/v1/portfolio.proto=github.com/coinbase/staking-client-library-ts

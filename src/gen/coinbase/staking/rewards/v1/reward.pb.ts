@@ -23,6 +23,12 @@ export enum AggregationUnit {
   DAY = "DAY",
 }
 
+export enum RewardState {
+  STATE_UNSPECIFIED = "STATE_UNSPECIFIED",
+  PENDING_CLAIMABLE = "PENDING_CLAIMABLE",
+  MATERIALIZED = "MATERIALIZED",
+}
+
 export enum USDValueSource {
   SOURCE_UNSPECIFIED = "SOURCE_UNSPECIFIED",
   COINBASE_EXCHANGE = "COINBASE_EXCHANGE",
@@ -38,6 +44,7 @@ type BaseReward = {
   totalEarnedUsd?: USDValue[]
   endingBalance?: CoinbaseStakingRewardsV1Stake.Stake
   protocol?: string
+  rewardState?: RewardState
 }
 
 export type Reward = BaseReward

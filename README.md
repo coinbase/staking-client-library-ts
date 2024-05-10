@@ -19,22 +19,19 @@ A traditional infrastructure-heavy staking integration can take months. Coinbase
 Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 1. In a fresh directory, run:
+
    ```shell
    npm install @coinbase/staking-client-library-ts
    ```
 
-2. Install necessary Typescript dependencies:
-   ```shell
-   npm install -g ts-node typescript
-   ```
+2. Copy and paste a code sample from [below](#stake-partial-eth-💠) or any other [example](./examples/) into an `example.ts` file.
 
-3. Get your API keys info such as api key name and api private key from here: https://portal.cdp.coinbase.com/access/api. <br>
-   These will be used in order to set up our client later in the example code. <br>
-   For detailed instructions refer to our api key setup guide [here](https://docs.cdp.coinbase.com/developer-platform/docs/cdp-keys).
+3. Create a new API Key in the [portal](https://portal.cdp.coinbase.com/access/api) and paste the `API key name` and `Secret` into the example.
 
-4. Copy and paste one of the code samples below or any of our [provided examples](./examples/) into an `example.ts` file and run it with `ts-node` :rocket:
+4. Run :rocket:
+
    ```shell
-   ts-node example.ts
+   npx ts-node example.ts
    ```
 
 ### Stake Partial ETH :diamond_shape_with_a_dot_inside:

@@ -26,7 +26,7 @@ Prerequisite: [Node 20+](https://www.npmjs.com/package/node/v/20.11.1)
 
 2. Copy and paste a code sample from [below](#stake-partial-eth-💠) or any other [example](./examples/) into an `example.ts` file.
 
-3. Create a new API Key in the [portal](https://portal.cdp.coinbase.com/access/api) and paste the `API key name` and `Secret` into the example.
+3. Create a new API Key in the [portal](https://portal.cdp.coinbase.com/access/api) and paste the API Key name and private key into the example.
 
 4. Run :rocket:
 

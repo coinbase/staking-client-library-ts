@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'package.json'
+      - "package.json"
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -18,44 +18,45 @@ jobs:
       id-token: write
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Get version from package.json
-      id: package_version
-      run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - name: Get version from package.json
+        id: package_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-    - name: Check if tag exists
-      id: check_tag
-      run: |
-        git fetch --tags
-        if git rev-parse "v${{ steps.package_version.outputs.VERSION }}" >/dev/null 2>&1; then
-          echo "::set-output name=EXISTS::true"
-        fi
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          git fetch --tags
+          if git rev-parse "v${{ steps.package_version.outputs.VERSION }}" >/dev/null 2>&1; then
+            echo "::set-output name=EXISTS::true"
+          fi
 
-    - name: Create Release
-      if: steps.check_tag.outputs.EXISTS != 'true'
-      uses: softprops/action-gh-release@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.package_version.outputs.VERSION }}
-        name: Release v${{ steps.package_version.outputs.VERSION }}
-        draft: false
-        prerelease: false
-        generate_release_notes: true
-        make_latest: true
+      - name: Create Release
+        if: steps.check_tag.outputs.EXISTS != 'true'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.package_version.outputs.VERSION }}
+          name: Release v${{ steps.package_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          make_latest: true
 
-    - name: Setup node
-      uses: actions/setup-node@v4
-      with:
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
-    - name: Publish to NPM
-      run: |
-        npm install -g npm@^9.5.0
-        npm ci
-        npm publish --provenance --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM
+        if: steps.check_tag.outputs.EXISTS != 'true'
+        run: |
+          npm install -g npm@^9.5.0
+          npm ci
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

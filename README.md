@@ -275,3 +275,7 @@ There are numerous examples in the [`examples directory`](./examples) to help ge
 ## Contributing
 
 Thanks for considering contributing to the project! Please refer to [our contribution guide](./CONTRIBUTING.md).
+
+## Contact Us
+
+If you have any questions, please reach out to us in the #staking channel on our [Discord](https://discord.com/invite/cdp) server.

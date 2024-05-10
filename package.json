@@ -1,6 +1,6 @@
 {
   "name": "@coinbase/staking-client-library-ts",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Coinbase Staking API Typescript Library",
   "repository": "https://github.com/coinbase/staking-client-library-ts.git",
   "license": "Apache-2.0",

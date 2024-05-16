@@ -172,12 +172,12 @@ client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '10
 
 ### View Partial ETH Rewards :moneybag:
 
-This code sample helps view rewards for an Ethereum address. View the full source [here](examples/ethereum/list-rewards.ts).
+This code sample helps view rewards for an Ethereum address. View the full source [here](examples/ethereum/list-rewards/partial-eth.ts).
 
 <details open>
 
 ```typescript
-// examples/ethereum/list-rewards.ts
+// examples/ethereum/list-rewards/partial-eth.ts
 import { StakingClient } from "@coinbase/staking-client-library-ts";
 
 // Set your api key name and private key here. Get your keys from here: https://portal.cdp.coinbase.com/access/api

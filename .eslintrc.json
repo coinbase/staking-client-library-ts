@@ -54,7 +54,7 @@
 			"error",
 			"always"
 		],
-		"padding-line-between-statements": [
+		"@typescript-eslint/padding-line-between-statements": [
 			"error",
 			{
 				"blankLine": "always",

@@ -170,9 +170,9 @@ client.Solana.stake('devnet', '8rMGARtkJY5QygP1mgvBFLsE9JrvXByARJiyNfcSE5Z', '10
 
    </details>
 
-### View Ethereum Rewards :moneybag:
+### View Partial ETH Rewards :moneybag:
 
-This code sample helps view rewards for an Ethereum validator address. View the full source [here](examples/ethereum/list-rewards.ts).
+This code sample helps view rewards for an Ethereum address. View the full source [here](examples/ethereum/list-rewards.ts).
 
 <details open>
 
@@ -188,15 +188,18 @@ const client = new StakingClient(apiKeyName, apiPrivateKey);
 
 // Defines which address and rewards we want to see
 const address: string =
-  '0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474';
-const filter: string = `address='${address}' AND period_end_time > '2024-02-25T00:00:00Z' AND period_end_time < '2024-02-27T00:00:00Z'`;
+  '0x60c7e246344ae3856cf9abe3a2e258d495fc39e0';
+const filter: string = `address='${address}' AND period_end_time > '2024-05-01T00:00:00Z' AND period_end_time < '2024-05-02T00:00:00Z'`;
 
 // Loops through rewards array and prints each reward
-client.Ethereum.listRewards(filter).then((resp) => {
+var list = async function () {
+  const resp = await client.Ethereum.listRewards(filter)
   resp.rewards!.forEach((reward) => {
     console.log(JSON.stringify(reward, null, 2));
   });
-});
+}
+
+list();
 ```
 
 </details>
@@ -205,62 +208,35 @@ client.Ethereum.listRewards(filter).then((resp) => {
      <summary>Output</summary>
 
    ```json
-   {
-      "address": "0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474",
-      "date": "2024-02-25",
-      "aggregationUnit": "DAY",
-      "periodStartTime": "2024-02-25T00:00:00Z",
-      "periodEndTime": "2024-02-25T23:59:59Z",
-      "totalEarnedNativeUnit": {
-         "amount": "0.002183619",
-         "exp": "18",
-         "ticker": "ETH",
-         "rawNumeric": "2183619000000000"
-      },
-      "totalEarnedUsd": [
-         {
-            "source": "COINBASE_EXCHANGE",
-            "conversionTime": "2024-02-26T00:09:00Z",
-            "amount": {
-               "amount": "6.79",
-               "exp": "2",
-               "ticker": "USD",
-               "rawNumeric": "679"
-            },
-            "conversionPrice": "3105.780029"
-         }
-      ],
-      "endingBalance": null,
-      "protocol": "ethereum"
-   }
-   {
-      "address": "0xac53512c39d0081ca4437c285305eb423f474e6153693c12fbba4a3df78bcaa3422b31d800c5bea71c1b017168a60474",
-      "date": "2024-02-26",
-      "aggregationUnit": "DAY",
-      "periodStartTime": "2024-02-26T00:00:00Z",
-      "periodEndTime": "2024-02-26T23:59:59Z",
-      "totalEarnedNativeUnit": {
-         "amount": "0.002182946",
-         "exp": "18",
-         "ticker": "ETH",
-         "rawNumeric": "2182946000000000"
-      },
-      "totalEarnedUsd": [
-         {
-            "source": "COINBASE_EXCHANGE",
-            "conversionTime": "2024-02-27T00:09:00Z",
-            "amount": {
-               "amount": "6.94",
-               "exp": "2",
-               "ticker": "USD",
-               "rawNumeric": "694"
-            },
-            "conversionPrice": "3178.889893"
-         }
-      ],
-      "endingBalance": null,
-      "protocol": "ethereum"
-   }
+  {
+    "address": "0x60c7e246344ae3856cf9abe3a2e258d495fc39e0",
+    "date": "2024-05-01",
+    "aggregationUnit": "DAY",
+    "periodStartTime": "2024-05-01T00:00:00Z",
+    "periodEndTime": "2024-05-01T23:59:59Z",
+    "totalEarnedNativeUnit": {
+      "amount": "0.001212525541415161",
+      "exp": "18",
+      "ticker": "ETH",
+      "rawNumeric": "1212525541415161"
+    },
+    "totalEarnedUsd": [
+      {
+        "source": "COINBASE_EXCHANGE",
+        "conversionTime": "2024-05-02T00:09:00Z",
+        "amount": {
+          "amount": "3.61",
+          "exp": "2",
+          "ticker": "USD",
+          "rawNumeric": "361"
+        },
+        "conversionPrice": "2971.419922"
+      }
+    ],
+    "endingBalance": null,
+    "protocol": "ethereum",
+    "rewardState": "PENDING_CLAIMABLE"
+  }
    ```
 
    </details>

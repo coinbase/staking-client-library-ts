@@ -214,8 +214,7 @@ export class StakingClient {
     stepIndex: number,
     data: string,
   ): Promise<Workflow> {
-    const name: string = `${parent}/${workflowName}`;
-    const path: string = `/v1/${name}/step`;
+    const path: string = `/v1/${workflowName}/step`;
     const method: string = 'POST';
     const url: string = this.baseURL + '/orchestration';
 
@@ -230,7 +229,7 @@ export class StakingClient {
     );
 
     const req: PerformWorkflowStepRequest = {
-      name: name,
+      name: workflowName,
       step: stepIndex,
       data,
     };

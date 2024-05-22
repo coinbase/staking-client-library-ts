@@ -337,6 +337,26 @@ export function isWaitStepOutput(
   return (step as WorkflowStep).waitStepOutput !== undefined;
 }
 
+export function getUnsignedTx(workflow: Workflow): string {
+  if (workflow.steps === undefined) {
+    throw new Error('No steps found in workflow');
+  }
+
+  if (workflow.currentStepId === undefined) {
+    throw new Error('No current step found in workflow');
+  }
+
+  if (workflow.steps[workflow.currentStepId].txStepOutput === undefined) {
+    throw new Error(
+      `No txStepOutput found in workflow step ${workflow.currentStepId}`,
+    );
+  }
+
+  return <string>(
+    workflow.steps[workflow.currentStepId].txStepOutput?.unsignedTx
+  );
+}
+
 async function getAuthDetails(
   url: string,
   path: string,

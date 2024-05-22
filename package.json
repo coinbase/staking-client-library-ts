@@ -1,6 +1,6 @@
 {
   "name": "@coinbase/staking-client-library-ts",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Coinbase Staking API Typescript Library",
   "repository": "https://github.com/coinbase/staking-client-library-ts.git",
   "license": "Apache-2.0",
@@ -10,8 +10,8 @@
     "clean-gen": "rm -rf src/gen/*",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
-    "lint": "eslint . --ext .ts --ignore-pattern '/dist/*/*' --ignore-pattern '/src/gen/*/*'",
-    "lint-fix": "eslint . --ext .ts --fix --ignore-pattern '/dist/*/*' --ignore-pattern '/src/gen/*/*'"
+    "lint": "eslint . --ext .ts --ignore-pattern 'dist/**/*' --ignore-pattern 'src/gen/**/*'",
+    "lint-fix": "eslint . --ext .ts --fix --ignore-pattern 'dist/**/*' --ignore-pattern 'src/gen/**/*'"
   },
   "publishConfig": {
     "access": "public",

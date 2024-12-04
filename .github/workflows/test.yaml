@@ -1,9 +1,9 @@
-name: TypeScript Lint
+name: TypeScript Test
 
 on:
   push:
     branches:
-      - master
+      - "**" # This will trigger the workflow on every push to any branch
   pull_request:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lint:
-    name: lint
+    name: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,5 +21,5 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Run npm ci
         run: npm ci
-      - name: Run linter
-        run: npm run lint
+      - name: Run tests
+        run: npm run test

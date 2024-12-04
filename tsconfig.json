@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
     "types": [
+      "mocha",
       "node"
     ]
   },

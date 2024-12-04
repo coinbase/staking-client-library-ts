@@ -6,11 +6,8 @@ on:
       - "**" # This will trigger the workflow on every push to any branch
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
-  lint:
+  test:
     name: test
     runs-on: ubuntu-latest
     steps:

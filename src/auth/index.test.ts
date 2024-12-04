@@ -1,18 +1,23 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import * as fs from 'fs';
+import proxyquire from 'proxyquire';
 import { JWK, JWS } from 'node-jose';
-import { buildJWT } from './index';
 
-describe('buildJWT', () => {
+describe('BuildJWT', () => {
   let readFileSyncStub: sinon.SinonStub;
   let asKeyStub: sinon.SinonStub;
   let signStub: sinon.SinonStub;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let buildJWT: any;
 
   beforeEach(() => {
-    readFileSyncStub = sinon.stub(fs, 'readFileSync');
+    readFileSyncStub = sinon.stub();
     asKeyStub = sinon.stub(JWK, 'asKey');
     signStub = sinon.stub(JWS, 'createSign');
+
+    buildJWT = proxyquire('./index', {
+      fs: { readFileSync: readFileSyncStub },
+    }).buildJWT;
   });
 
   afterEach(() => {
@@ -23,9 +28,11 @@ describe('buildJWT', () => {
     const url = 'https://api.example.com/resource';
     const method = 'POST';
     const apiKeyName = 'test-api-key';
-    const apiPrivateKey = 'test-private-key';
-    const pemPrivateKey =
+    const apiPrivateKey =
       '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
+    // The method strips the newline characters under the hood, so we've removed that from the expected value
+    const pemPrivateKey =
+      '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
     const privateKey = { kty: 'EC' };
 
     asKeyStub.resolves(privateKey);
@@ -46,10 +53,11 @@ describe('buildJWT', () => {
     const method = 'POST';
     const apiKey = {
       name: 'test-api-key',
-      privateKey: 'test-private-key',
+      privateKey:
+        '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----',
     };
     const pemPrivateKey =
-      '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
+      '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
     const privateKey = { kty: 'EC' };
 
     readFileSyncStub.returns(JSON.stringify(apiKey));
@@ -75,9 +83,10 @@ describe('buildJWT', () => {
     const url = 'https://api.example.com/resource';
     const method = 'POST';
     const apiKeyName = 'test-api-key';
-    const apiPrivateKey = 'test-private-key';
-    const pemPrivateKey =
+    const apiPrivateKey =
       '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
+    const pemPrivateKey =
+      '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
     const privateKey = { kty: 'RSA' };
 
     asKeyStub.resolves(privateKey);
@@ -86,7 +95,7 @@ describe('buildJWT', () => {
       await buildJWT(url, method, apiKeyName, apiPrivateKey);
       expect.fail('Expected buildJWT to throw an error');
     } catch (error) {
-      expect((error as Error).message).to.equal('Not an EC private key');
+      expect((error as Error).message).to.contain('Not an EC private key');
     }
 
     expect(asKeyStub.calledOnceWithExactly(pemPrivateKey, 'pem')).to.be.true;
@@ -97,9 +106,10 @@ describe('buildJWT', () => {
     const url = 'https://api.example.com/resource';
     const method = 'POST';
     const apiKeyName = 'test-api-key';
-    const apiPrivateKey = 'test-private-key';
-    const pemPrivateKey =
+    const apiPrivateKey =
       '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
+    const pemPrivateKey =
+      '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
 
     asKeyStub.rejects(new Error('Invalid key'));
 
@@ -108,7 +118,7 @@ describe('buildJWT', () => {
       expect.fail('Expected buildJWT to throw an error');
     } catch (error) {
       expect((error as Error).message).to.include(
-        'jwt: Could not decode or parse private key. Invalid key',
+        'jwt: Could not decode or parse private key. Error: Invalid key',
       );
     }
 

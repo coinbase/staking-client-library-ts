@@ -3,7 +3,7 @@ name: TypeScript Test
 on:
   push:
     branches:
-      - "**" # This will trigger the workflow on every push to any branch
+      - main
   pull_request:
 
 jobs:

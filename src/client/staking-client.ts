@@ -127,7 +127,6 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
       path,
@@ -153,7 +152,6 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
       path,
@@ -173,7 +171,6 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
       path,
@@ -191,7 +188,6 @@ export class StakingClient {
     const method: string = 'GET';
     const url: string = this.baseURL + '/orchestration';
 
-    // Generate the JWT token and get the auth details as a initReq object.
     // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
@@ -220,7 +216,6 @@ export class StakingClient {
     const url: string = this.baseURL + '/orchestration';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
       path,
@@ -247,7 +242,6 @@ export class StakingClient {
     const method: string = 'GET';
     const url: string = this.baseURL + '/orchestration';
 
-    // Generate the JWT token and get the auth details as a initReq object.
     // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
@@ -276,7 +270,6 @@ export class StakingClient {
     const url: string = this.baseURL + '/rewards';
 
     // Generate the JWT token and get the auth details as a initReq object.
-    // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
       path,
@@ -298,7 +291,6 @@ export class StakingClient {
     const method: string = 'GET';
     const url: string = this.baseURL + '/rewards';
 
-    // Generate the JWT token and get the auth details as a initReq object.
     // Generate the JWT token and get the auth details as a initReq object.
     const initReq = await getAuthDetails(
       url,
@@ -357,7 +349,7 @@ export function getUnsignedTx(workflow: Workflow): string {
   );
 }
 
-async function getAuthDetails(
+export async function getAuthDetails(
   url: string,
   path: string,
   method: string,

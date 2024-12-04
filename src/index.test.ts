@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-describe('Sample Test', () => {
+describe('SanityCheck', () => {
   it('should return true', () => {
     expect(true).to.be.true;
   });

@@ -13,7 +13,7 @@ import {
   ListActionsResponse,
 } from '../gen/coinbase/staking/orchestration/v1/action.pb';
 import * as fm from '../gen/fetch.pb';
-import { buildJWT } from '../auth';
+import { buildJWT } from '../auth/jwt';
 import {
   ViewStakingContextRequest,
   ViewStakingContextResponse,
@@ -23,7 +23,6 @@ import {
   GetWorkflowRequest,
   ListWorkflowsRequest,
   ListWorkflowsResponse,
-  PerformWorkflowStepRequest,
   Workflow,
   WorkflowState,
   WorkflowStep,
@@ -202,35 +201,6 @@ export class StakingClient {
     };
 
     return StakingService.GetWorkflow(req, initReq);
-  }
-
-  // Return back a signed tx or a broadcasted tx hash for a given workflow and step number.
-  async performWorkflowStep(
-    workflowName: string,
-    stepIndex: number,
-    data: string,
-  ): Promise<Workflow> {
-    const name: string = `${parent}/${workflowName}`;
-    const path: string = `/v1/${name}/step`;
-    const method: string = 'POST';
-    const url: string = this.baseURL + '/orchestration';
-
-    // Generate the JWT token and get the auth details as a initReq object.
-    const initReq = await getAuthDetails(
-      url,
-      path,
-      method,
-      this.apiKeyName,
-      this.apiPrivateKey,
-    );
-
-    const req: PerformWorkflowStepRequest = {
-      name: name,
-      step: stepIndex,
-      data,
-    };
-
-    return StakingService.PerformWorkflowStep(req, initReq);
   }
 
   // List your workflows.

@@ -10,7 +10,8 @@
     "clean-gen": "rm -rf src/gen/*",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
-    "test": "npx mocha --config ./.mocharc.json \"**/*.test.ts\"",
+    "test": "nyc mocha --require ts-node/register 'src/**/*.test.ts'",
+    "coverage": "nyc report --reporter=text-lcov && open coverage/index.html",
     "lint": "eslint . --ext .ts --ignore-pattern 'dist/**/*' --ignore-pattern 'src/gen/**/*'",
     "lint-fix": "eslint . --ext .ts --fix --ignore-pattern 'dist/**/*' --ignore-pattern 'src/gen/**/*'"
   },
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@ethereumjs/tx": "^5.4.0",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.11.0",
@@ -47,6 +49,7 @@
     "eslint-plugin-unicorn": "^51.0.1",
     "ethereumjs-util": "^7.1.5",
     "mocha": "^11.0.1",
+    "nyc": "^17.1.0",
     "prettier": "^3.0.3",
     "prettier-eslint": "^16.0.0",
     "proxyquire": "^2.1.3",

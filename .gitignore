@@ -39,3 +39,7 @@ dist/
 node_modules/
 
 docs/**/*.json
+
+# code coverage output
+coverage
+.nyc_output

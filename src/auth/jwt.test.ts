@@ -15,7 +15,7 @@ describe('BuildJWT', () => {
     asKeyStub = sinon.stub(JWK, 'asKey');
     signStub = sinon.stub(JWS, 'createSign');
 
-    buildJWT = proxyquire('./index', {
+    buildJWT = proxyquire('./jwt', {
       fs: { readFileSync: readFileSyncStub },
     }).buildJWT;
   });
@@ -30,7 +30,6 @@ describe('BuildJWT', () => {
     const apiKeyName = 'test-api-key';
     const apiPrivateKey =
       '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
-    // The method strips the newline characters under the hood, so we've removed that from the expected value
     const pemPrivateKey =
       '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
     const privateKey = { kty: 'EC' };
@@ -124,5 +123,34 @@ describe('BuildJWT', () => {
 
     expect(asKeyStub.calledOnceWithExactly(pemPrivateKey, 'pem')).to.be.true;
     expect(signStub.notCalled).to.be.true;
+  });
+
+  it('should throw an error if JWT signing fails', async () => {
+    const url = 'https://api.example.com/resource';
+    const method = 'POST';
+    const apiKeyName = 'test-api-key';
+    const apiPrivateKey =
+      '-----BEGIN EC PRIVATE KEY-----\ntest-private-key\n-----END EC PRIVATE KEY-----';
+    const pemPrivateKey =
+      '-----BEGIN EC PRIVATE KEY-----test-private-key-----END EC PRIVATE KEY-----';
+    const privateKey = { kty: 'EC' };
+
+    asKeyStub.resolves(privateKey);
+    signStub.returns({
+      update: sinon.stub().returnsThis(),
+      final: sinon.stub().rejects(new Error('Signing failed')),
+    });
+
+    try {
+      await buildJWT(url, method, apiKeyName, apiPrivateKey);
+      expect.fail('Expected buildJWT to throw an error');
+    } catch (error) {
+      expect((error as Error).message).to.include(
+        'jwt: Failed to sign JWT. Error: Signing failed',
+      );
+    }
+
+    expect(asKeyStub.calledOnceWithExactly(pemPrivateKey, 'pem')).to.be.true;
+    expect(signStub.calledOnce).to.be.true;
   });
 });

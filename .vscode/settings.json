@@ -1,0 +1,36 @@
+{
+    "markdownlint.config": {
+        "MD033": false,
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": false,
+    "files.autoSave": "onFocusChange",
+    "cSpell.words": [
+        "automerge",
+        "holesky",
+        "nonroutine",
+        "solana",
+        "txsigner",
+        "unstake"
+    ],
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "vs-code-prettier-eslint.prettierLast": false,
+    "[javascript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "files.insertFinalNewline": true,
+}

@@ -1,4 +1,4 @@
-name: TypeScript Lint
+name: TypeScript Test
 
 on:
   push:
@@ -6,12 +6,9 @@ on:
       - main
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
-  lint:
-    name: lint
+  test:
+    name: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,5 +18,5 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Run npm ci
         run: npm ci
-      - name: Run linter
-        run: npm run lint
+      - name: Run tests
+        run: npm run test

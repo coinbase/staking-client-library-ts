@@ -38,7 +38,8 @@ dist/
 
 node_modules/
 
-# VSCode configuration
-.vscode
-
 docs/**/*.json
+
+# code coverage output
+coverage
+.nyc_output
